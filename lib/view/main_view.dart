@@ -34,78 +34,80 @@ class MainProfileView extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverToBoxAdapter(
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              minRadius: 48,
-                              maxRadius: 128,
-                            ),
-                            const Text(
-                              'Sirojul Munir',
-                            ),
-                            const Text(
-                                'Sekolah Tinggi Teknologi Terpadu Nurul Fikri (STT-NF)'),
-                            RichText(
-                              text: const TextSpan(children: [
-                                TextSpan(
-                                    text:
-                                        'Verified email at nurulfikri.ac.id - '),
-                                TextSpan(
-                                  text: 'Homepage',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline),
-                                ),
-                              ]),
-                            ),
-                            Wrap(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('Software Engineering'),
+                                const CircleAvatar(
+                                  backgroundColor: Colors.blue,
+                                  minRadius: 48,
+                                  maxRadius: 128,
                                 ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('Database'),
+                                const Text(
+                                  'Sirojul Munir',
                                 ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('Machine Learning'),
+                                const Text(
+                                    'Sekolah Tinggi Teknologi Terpadu Nurul Fikri (STT-NF)'),
+                                RichText(
+                                  text: const TextSpan(
+                                      style: TextStyle(color: Colors.black),
+                                      children: [
+                                        TextSpan(
+                                            text:
+                                                'Verified email at nurulfikri.ac.id - '),
+                                        TextSpan(
+                                          text: 'Homepage',
+                                          style: TextStyle(
+                                              color: Colors.blue,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                      ]),
+                                ),
+                                Wrap(
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text('Software Engineering'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text('Database'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text('Machine Learning'),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        IconButton(
-                            style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.blue),
-                            ),
-                            color: Colors.white,
-                            onPressed: () {},
-                            icon: const Icon(Icons.notification_add_rounded))
-                      ],
-                    ),
-                  ],
+                          ),
+                          IconButton(
+                              style: const ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Colors.blue),
+                              ),
+                              color: Colors.white,
+                              onPressed: () {},
+                              icon: const Icon(Icons.notification_add_rounded))
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Consumer<TabBarViewModel>(
-                  builder: (
-                    context,
-                    value,
-                    child,
-                  ) {
+                  builder: (context, value, child) {
                     if (!value.isInitialized) {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -123,14 +125,78 @@ class MainProfileView extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               return ProfileTabBarView(
-                  article: const Text('1'),
-                  citedBy: const Text('2'),
-                  coAuthors: const Text('3'),
-                  controller: value.profileTabController);
+                controller: value.profileTabController,
+                article: _buildArticle(),
+                citedBy: _buildCitedBy(),
+                coAuthors: const Text('3'),
+              );
             },
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCitedBy() {
+    return Column(
+      children: [
+        DataTable(
+          columns: const [
+            DataColumn(
+              label: Text(''),
+            ),
+            DataColumn(
+              label: Text('All'),
+            ),
+            DataColumn(
+              label: Text('Since 2019'),
+            ),
+          ],
+          rows: [
+            DataRow(
+              cells: [
+                DataCell(
+                  Text('Citations'),
+                ),
+                DataCell(
+                  Text('250'),
+                ),
+                DataCell(
+                  Text('245'),
+                ),
+              ],
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildArticle() {
+    return ListView.separated(
+      // physics: NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return const ListTile(
+          title: Text(
+              'Perancangan Web E-Commerce Umkm Restoran Bakso Arema Menggunakan Framework Laravel'),
+          subtitle: Padding(
+            padding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('AZ Muchtar, S Munir'),
+                Text('Jurnal'),
+              ],
+            ),
+          ),
+          trailing: Text('20'),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const Divider();
+      },
     );
   }
 }

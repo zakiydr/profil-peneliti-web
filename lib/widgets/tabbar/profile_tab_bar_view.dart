@@ -14,13 +14,17 @@ class ProfileTabBarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(
-      controller: controller,
-      children: [
-        article,
-        citedBy,
-        coAuthors,
-      ],
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: [
+          article,
+          citedBy,
+          coAuthors,
+        ],
+      ),
     );
   }
 }
