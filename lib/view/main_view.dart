@@ -4,6 +4,7 @@ import 'package:profile_peneliti/view_model/tab_bar_view_model.dart';
 import 'package:profile_peneliti/widgets/tabbar/profile_tab_bar.dart';
 import 'package:profile_peneliti/widgets/tabbar/profile_tab_bar_view.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class MainProfileView extends StatelessWidget {
   const MainProfileView({super.key});
@@ -49,7 +50,7 @@ class MainProfileView extends StatelessWidget {
                                 const CircleAvatar(
                                   backgroundColor: Colors.blue,
                                   minRadius: 48,
-                                  maxRadius: 128,
+                                  maxRadius: 60,
                                 ),
                                 const Text(
                                   'Sirojul Munir',
@@ -128,7 +129,7 @@ class MainProfileView extends StatelessWidget {
                 controller: value.profileTabController,
                 article: _buildArticle(),
                 citedBy: _buildCitedBy(),
-                coAuthors: const Text('3'),
+                coAuthors: _buildCoAuthors(),
               );
             },
           ),
@@ -137,38 +138,29 @@ class MainProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildCitedBy() {
-    return Column(
-      children: [
-        DataTable(
-          columns: const [
-            DataColumn(
-              label: Text(''),
-            ),
-            DataColumn(
-              label: Text('All'),
-            ),
-            DataColumn(
-              label: Text('Since 2019'),
-            ),
-          ],
-          rows: [
-            DataRow(
-              cells: [
-                DataCell(
-                  Text('Citations'),
-                ),
-                DataCell(
-                  Text('250'),
-                ),
-                DataCell(
-                  Text('245'),
-                ),
-              ],
-            ),
-          ],
-        )
-      ],
+  ListView _buildCoAuthors() {
+    return ListView.separated(
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return ListTile(
+          titleAlignment: ListTileTitleAlignment.center,
+          isThreeLine: true,
+          leading: CircleAvatar(
+            backgroundColor: Colors.blue,
+          ),
+          title: Text('Nama Lengkap'),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('STT Terpadu Nurul Fikri'),
+              Text('Veritied email at ...'),
+            ],
+          ),
+          trailing: IconButton(
+              onPressed: () {}, icon: Icon(Icons.arrow_forward_ios_rounded)),
+        );
+      },
+      separatorBuilder: (context, index) => Divider(),
     );
   }
 
@@ -199,4 +191,101 @@ class MainProfileView extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _buildCitedBy() {
+  List<DataColumn> dataColumn = [
+    const DataColumn(
+      numeric: false,
+      label: Text(''),
+    ),
+    const DataColumn(
+      numeric: true,
+      label: Text('All'),
+    ),
+    const DataColumn(
+      numeric: true,
+      label: Text('Since 2019'),
+    ),
+  ];
+  List<DataRow> dataRow = [
+    const DataRow(
+      cells: [
+        DataCell(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Citations'),
+              Text('h-index'),
+              Text('i10-index'),
+            ],
+          ),
+        ),
+        DataCell(
+          Column(
+            children: [
+              Text('data'),
+              Text('data'),
+              Text('data'),
+            ],
+          ),
+        ),
+        DataCell(
+          Column(
+            children: [
+              Text('data'),
+              Text('data'),
+              Text('data'),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ];
+  return Column(
+    children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+              child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: DataTable(
+              headingRowHeight: 56,
+              dataRowMinHeight: 56,
+              dataRowMaxHeight: 108,
+              columns: dataColumn,
+              rows: dataRow,
+            ),
+          ))
+        ],
+      ),
+      // _buildChartCitedBy()
+    ],
+  );
+}
+
+BarChart _buildChartCitedBy() {
+  return BarChart(
+    BarChartData(
+      barTouchData: BarTouchData(),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            // getTitlesWidget: (value, meta) {
+            //   String text;
+            //   switch (value.toInt()) {
+            //     case 0:
+            //     text =
+            //   }
+            //   return SideTitleWidget(child: text, axisSide: meta.axisSide);
+            // },
+          ),
+        ),
+      ),
+    ),
+  );
 }
