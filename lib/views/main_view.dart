@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/utils/ticker_provider.dart';
 import 'package:profile_peneliti/view_model/tab_bar_view_model.dart';
+import 'package:profile_peneliti/widgets/interest_button/interest_button.dart';
 import 'package:profile_peneliti/widgets/tabbar/profile_tab_bar.dart';
 import 'package:profile_peneliti/widgets/tabbar/profile_tab_bar_view.dart';
 import 'package:provider/provider.dart';
@@ -47,8 +48,10 @@ class MainProfileView extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const CircleAvatar(
-                                  backgroundColor: Colors.blue,
+                                CircleAvatar(
+                                  // child: Image.network('src'),
+                                  // backgroundImage: ,
+                                  // backgroundColor: Colors.blue,
                                   minRadius: 48,
                                   maxRadius: 60,
                                 ),
@@ -73,19 +76,17 @@ class MainProfileView extends StatelessWidget {
                                         ),
                                       ]),
                                 ),
-                                Wrap(
+                                const Wrap(
+                                  spacing: 16,
                                   children: [
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: const Text('Software Engineering'),
+                                    InterestTextButton(
+                                      text: 'Software Engineering',
                                     ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: const Text('Database'),
+                                    InterestTextButton(
+                                      text: 'Database',
                                     ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: const Text('Machine Learning'),
+                                    InterestTextButton(
+                                      text: 'Machine Learning',
                                     ),
                                   ],
                                 ),
@@ -127,7 +128,7 @@ class MainProfileView extends StatelessWidget {
               }
               return ProfileTabBarView(
                 controller: value.profileTabController,
-                article: _buildArticle(),
+                articles: _buildArticles(),
                 citedBy: _buildCitedBy(),
                 coAuthors: _buildCoAuthors(),
               );
@@ -164,7 +165,7 @@ class MainProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildArticle() {
+  Widget _buildArticles() {
     return ListView.separated(
       // physics: NeverScrollableScrollPhysics(),
       itemCount: 10,
@@ -175,7 +176,7 @@ class MainProfileView extends StatelessWidget {
           subtitle: Padding(
             padding: EdgeInsets.zero,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('AZ Muchtar, S Munir'),

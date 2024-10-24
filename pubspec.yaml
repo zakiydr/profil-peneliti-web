@@ -19,6 +19,12 @@ dependencies:
   universal_io: ^2.2.2
   google_fonts: ^5.1.0
   fl_chart: ^0.69.0
+  intl: ^0.19.0
+  dio: ^5.7.0
+  json_annotation: ^4.9.0
+  build_runner: ^2.4.9
+  json_serializable: ^6.8.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

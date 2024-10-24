@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:profile_peneliti/view/main_view.dart';
+import 'package:profile_peneliti/views/main_dashboard.dart';
+import 'package:profile_peneliti/views/main_view.dart';
 import 'package:profile_peneliti/view_model/tab_bar_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: const MainProfileView(),
+        home: MainDashboard(),
       ),
     );
   }

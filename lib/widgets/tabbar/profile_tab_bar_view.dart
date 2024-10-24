@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProfileTabBarView extends StatelessWidget {
-  final Widget article;
+  final Widget articles;
   final Widget citedBy;
   final Widget coAuthors;
   final TabController controller;
   const ProfileTabBarView(
       {super.key,
-      required this.article,
+      required this.articles,
       required this.citedBy,
       required this.coAuthors,
       required this.controller});
@@ -20,7 +20,7 @@ class ProfileTabBarView extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
-          article,
+          articles,
           citedBy,
           coAuthors,
         ],
