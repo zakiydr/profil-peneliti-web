@@ -91,10 +91,9 @@ class DashboardMenu extends StatelessWidget {
                           TextButton(
                             onPressed: () async {
                               await scholar.saveData();
-                              await citation.saveCitation();
+                              await citation.saveCitation(
+                                  scholar.scholarDetail!.citedby!.toInt() - 5);
                               await publication.savePubCitations();
-                              FlutterAppBadge.count(
-                                  scholar.scholarDetail!.citedby!.toInt());
 
                               Navigator.pop(context);
 

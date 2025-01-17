@@ -18,20 +18,17 @@ class QuickStatsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceType = ResponsiveConfig.getDeviceType(context);
 
-    return SizedBox(
-      width: ResponsiveConfig.getMaxWidth(context),
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisSpacing: 16,
-        childAspectRatio: deviceType == DeviceType.desktop
-            ? childAspectRatio * 1.2
-            : deviceType == DeviceType.tablet
-                ? childAspectRatio
-                : childAspectRatio * 0.8,
-        crossAxisCount: deviceType == DeviceType.mobile ? 2 : crossAxisCount,
-        physics: const NeverScrollableScrollPhysics(),
-        children: children,
-      ),
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisSpacing: 32,
+      childAspectRatio: deviceType == DeviceType.desktop
+          ? childAspectRatio * 1.5
+          : deviceType == DeviceType.tablet
+              ? childAspectRatio * 0.8
+              : childAspectRatio,
+      crossAxisCount: deviceType == DeviceType.mobile ? 2 : crossAxisCount,
+      physics: const NeverScrollableScrollPhysics(),
+      children: children,
     );
   }
 }

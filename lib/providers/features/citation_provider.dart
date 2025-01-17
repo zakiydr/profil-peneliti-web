@@ -10,13 +10,13 @@ class CitationProvider extends AppProvider {
 
   ScholarDetail? _scholarDetail;
 
-  Future<void> saveCitation() async {
-    if (_scholarDetail == null) return;
+  Future<void> saveCitation(value) async {
+    // if (_scholarDetail == null) return;
 
     final prefs = await SharedPreferences.getInstance();
 
     final savedCitation = prefs.getInt('citation') ?? 0;
-    final currentCitation = _scholarDetail!.citedby!.toInt();
+    final currentCitation = value;
 
     if (savedCitation != currentCitation) {
       await prefs.setInt('citation', currentCitation);

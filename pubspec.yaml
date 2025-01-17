@@ -29,6 +29,7 @@ dependencies:
   dyn_mouse_scroll: ^1.0.7
   flutter_app_badge: ^2.0.2
   flutter_local_notifications: ^18.0.1
+  flutter_svg: ^2.0.17
   # shared_preferences_web: ^2.4.2
 
 dev_dependencies:

@@ -56,6 +56,7 @@ class OverviewView extends StatelessWidget {
                               DeviceType.desktop)
                             _buildSideItems(textTheme, context, scholar),
                           _buildDashboardTitle(context, textTheme),
+                          space,
                           _buildQuickStats(scholar),
                           space,
                           _buildChartCard(textTheme, scholar, context),
@@ -117,16 +118,18 @@ class OverviewView extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          ListTile(
-            // tileColor: Colors.white,
-
-            leading: imgLoader(scholar.scholarDetail?.urlPicture),
-            title: Text(
-              scholar.scholarDetail?.name.toString() ?? '',
-              style: textTheme.titleSmall,
+          Container(
+            child: ListTile(
+              // tileColor: Colors.white,
+              leading: imgLoader(scholar.scholarDetail?.urlPicture),
+              title: Text(
+                scholar.scholarDetail?.name.toString() ?? '',
+                style: textTheme.titleSmall,
+              ),
+              subtitle: Text(
+                  scholar.scholarDetail?.affiliation.toString() ?? '',
+                  style: textTheme.labelSmall),
             ),
-            subtitle: Text(scholar.scholarDetail?.affiliation.toString() ?? '',
-                style: textTheme.labelSmall),
           ),
           // Container(
           //   height: 50,
@@ -151,14 +154,16 @@ class OverviewView extends StatelessWidget {
 
   Widget _buildQuickStats(ScholarDetailProvider scholar) {
     return QuickStatsWidget(
-      childAspectRatio: 1.5,
+      childAspectRatio: 4 / 2,
       crossAxisCount: 2,
       children: [
         QuickStatsCard(
+          color: Colors.lightBlue,
           title: 'h-index',
           content: scholar.scholarDetail?.hindex.toString() ?? '',
         ),
         QuickStatsCard(
+          color: Colors.orangeAccent,
           title: 'i10-index',
           content: scholar.scholarDetail?.i10Index.toString() ?? '',
         ),
@@ -214,8 +219,9 @@ class OverviewView extends StatelessWidget {
 
   Widget _buildMostCitedArticles(
       ScholarDetailProvider scholar, TextTheme textTheme) {
+    final pubLength = scholar.scholarDetail!.publications!.length;
     return MostCitedArticles(
-      itemCount: 10,
+      itemCount: pubLength <= 10 ? pubLength : 10,
       itemBuilder: (context, index) {
         return ListTile(
           isThreeLine: true,
@@ -244,35 +250,42 @@ class OverviewView extends StatelessWidget {
     final scholarDetail =
         Provider.of<ScholarDetailProvider>(context).scholarDetail;
 
-    final List<double> citesYearList = [];
+    // final List<double> citesYearList = [];
 
-    scholarDetail?.citesPerYear?.forEach(
-      (key, value) => citesYearList.add(value.toDouble()),
-    );
+    // scholarDetail?.citesPerYear?.forEach(
+    //   (key, value) => citesYearList.add(value.truncateToDouble()),
+    // );
+
+    final List<int> citesYearKeys =
+        scholarDetail?.citesPerYear?.keys.map((e) => int.parse(e)).toList() ??
+            [];
+    final List<double> citesYearValues =
+        scholarDetail?.citesPerYear?.values.map((e) => e.toDouble()).toList() ??
+            [];
+
+    double maxY = citesYearValues.isEmpty
+        ? 100
+        : citesYearValues.reduce((a, b) => a > b ? a : b);
 
     List<BarChartGroupData> generateBarGroups(int length) {
+      if (length == 0) return [];
+
       return List.generate(
-        7,
+        length,
         (index) => BarChartGroupData(
           x: index,
           barRods: [
             BarChartRodData(
               width: 15,
               color: Colors.blue,
-              toY: citesYearList[index],
+              toY: index < citesYearValues.length ? citesYearValues[index] : 0,
             ),
           ],
         ),
       );
-      // return List.generate(
-      //   length,
-      //   (index) => BarChartGroupData(
-      //     x: citesYearList[index],
-      //   ),
-      // );
     }
 
-    List<BarChartGroupData> barGroups = generateBarGroups(citesYearList.length);
+    List<BarChartGroupData> barGroups = generateBarGroups(citesYearKeys.length);
 
     final int thisYear = int.parse(
       DateFormat('y').format(
@@ -280,14 +293,13 @@ class OverviewView extends StatelessWidget {
       ),
     );
 
-    double maxY = 100;
     return Container(
       height: 300,
       padding: const EdgeInsets.all(16),
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: maxY,
+          maxY: maxY + (maxY * 0.1),
           barTouchData: BarTouchData(
             enabled: true,
             touchCallback: (event, response) {},
@@ -299,9 +311,11 @@ class OverviewView extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
-                  var xAxisTotal = barGroups.length - 1;
-                  final int year = (thisYear - xAxisTotal) + value.toInt();
-                  return Text(year.toString());
+                  int index = value.toInt();
+                  if (index >= 0 && index < citesYearKeys.length) {
+                    return Text('${citesYearKeys[index]}');
+                  }
+                  return const Text('');
                 },
               ),
             ),

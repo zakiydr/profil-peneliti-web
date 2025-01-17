@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profile_peneliti/utils/responsive.dart';
 
 class QuickStatsCard extends StatelessWidget {
   final String title;
   final String content;
+  final Color color;
   const QuickStatsCard({
     Key? key,
     required this.title,
     required this.content,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -15,27 +18,38 @@ class QuickStatsCard extends StatelessWidget {
     final padding = ResponsiveConfig.getPadding(context);
     final style = Theme.of(context).textTheme;
     return Card(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: style.titleMedium,
-                ),
-              ],
+            SvgPicture.asset(
+              'assets/images/stat_card.svg',
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(color, BlendMode.colorDodge),
             ),
-            Text(
-              content,
-              style: style.displaySmall,
+            Container(
+              decoration: BoxDecoration(),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: style.titleLarge,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    content,
+                    style: style.displaySmall,
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

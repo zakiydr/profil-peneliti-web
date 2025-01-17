@@ -46,9 +46,11 @@ class NotificationService {
         channelDescription: 'your channel description',
         importance: Importance.max,
         priority: Priority.high,
+        showWhen: true,
         icon: '@mipmap/sttnf_icon',
         ticker: 'ticker',
         channelShowBadge: true,
+        color: Colors.blue,
         colorized: true,
       );
       const NotificationDetails notificationDetails = NotificationDetails(
