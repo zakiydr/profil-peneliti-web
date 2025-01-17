@@ -263,35 +263,61 @@ class OverviewView extends StatelessWidget {
         scholarDetail?.citesPerYear?.values.map((e) => e.toDouble()).toList() ??
             [];
 
-    double maxY = citesYearValues.isEmpty
-        ? 100
-        : citesYearValues.reduce((a, b) => a > b ? a : b);
+    List<MapEntry<int, double>> citesList = List.generate(
+      citesYearKeys.length,
+      (index) => MapEntry(citesYearKeys[index], citesYearValues[index]),
+    );
+
+    citesList.sort((a, b) => a.key.compareTo(b.key));
+
+    List<MapEntry<int, double>> latestCitesList = citesList.length > 7
+        ? citesList.sublist(citesList.length - 7)
+        : citesList;
+
+    final List<int> latestCitesYearKeys =
+        latestCitesList.map((e) => e.key).toList();
+    final List<double> latestCitesYearValues =
+        latestCitesList.map((e) => e.value).toList();
 
     List<BarChartGroupData> generateBarGroups(int length) {
       if (length == 0) return [];
 
       return List.generate(
-        length,
+        length <= 7 ? length : 7,
         (index) => BarChartGroupData(
           x: index,
           barRods: [
             BarChartRodData(
               width: 15,
               color: Colors.blue,
-              toY: index < citesYearValues.length ? citesYearValues[index] : 0,
+              toY: index < latestCitesYearValues.length
+                  ? latestCitesYearValues[index]
+                  : 0,
             ),
           ],
         ),
       );
     }
 
-    List<BarChartGroupData> barGroups = generateBarGroups(citesYearKeys.length);
+    List<BarChartGroupData> barGroups =
+        generateBarGroups(latestCitesYearKeys.length);
 
-    final int thisYear = int.parse(
-      DateFormat('y').format(
-        DateTime.now(),
-      ),
-    );
+    double dynamicMax(double number) {
+      if (number <= 0) return 0;
+
+      int value = number.ceil();
+
+      int magnitude = (log(value) / log(10)).floor();
+
+      double base = pow(10, magnitude).toDouble();
+
+      int firstDigit = (value / base).floor();
+
+      if (firstDigit <= 1) return base;
+      if (firstDigit <= 2) return 2 * base;
+      if (firstDigit <= 5) return 5 * base;
+      return 10 * base;
+    }
 
     return Container(
       height: 300,
@@ -299,11 +325,14 @@ class OverviewView extends StatelessWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: maxY + (maxY * 0.1),
+          maxY: dynamicMax(citesYearValues.reduce(max)),
           barTouchData: BarTouchData(
             enabled: true,
             touchCallback: (event, response) {},
-            touchTooltipData: BarTouchTooltipData(),
+            touchTooltipData: BarTouchTooltipData(
+              tooltipHorizontalOffset: 50,
+              getTooltipColor: (group) => Colors.white,
+            ),
           ),
           titlesData: FlTitlesData(
             show: true,
@@ -312,8 +341,8 @@ class OverviewView extends StatelessWidget {
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   int index = value.toInt();
-                  if (index >= 0 && index < citesYearKeys.length) {
-                    return Text('${citesYearKeys[index]}');
+                  if (index >= 0 && index < latestCitesYearKeys.length) {
+                    return Text('${latestCitesYearKeys[index]}');
                   }
                   return const Text('');
                 },
@@ -346,7 +375,7 @@ class OverviewView extends StatelessWidget {
               );
             },
             show: true,
-            horizontalInterval: maxY / 5,
+            horizontalInterval: dynamicMax(citesYearValues.reduce(max)) / 10,
           ),
           borderData: FlBorderData(
               show: true, border: Border(bottom: BorderSide(width: .5))),
