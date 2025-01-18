@@ -71,6 +71,8 @@ class AppHeader extends StatelessWidget {
       builder: (context, citationSnapshot) {
         if (citationSnapshot.hasData) {
           return Badge(
+            offset: Offset(0, 0),
+            textStyle: style.labelSmall,
             label: Text('${citationSnapshot.data}'),
             isLabelVisible: getLabelVisible(citationSnapshot, scholar),
             child: FutureBuilder<int>(
@@ -182,7 +184,6 @@ class AppHeader extends StatelessWidget {
 //     'changedPublications': changedPublications,
 //   };
 // }
-
 
   bool getLabelVisible(
       AsyncSnapshot<int> citationSnapshot, ScholarDetailProvider scholar) {

@@ -22,11 +22,13 @@ class QuickStatsWidget extends StatelessWidget {
       shrinkWrap: true,
       crossAxisSpacing: 32,
       childAspectRatio: deviceType == DeviceType.desktop
-          ? childAspectRatio * 1.5
+          ? childAspectRatio
           : deviceType == DeviceType.tablet
               ? childAspectRatio * 0.8
               : childAspectRatio,
-      crossAxisCount: deviceType == DeviceType.mobile ? 2 : crossAxisCount,
+      crossAxisCount: 2,
+      // maxCrossAxisExtent: ResponsiveConfig.getMaxWidth(context),
+      // crossAxisCount: deviceType == DeviceType.mobile ? 2 : crossAxisCount,
       physics: const NeverScrollableScrollPhysics(),
       children: children,
     );

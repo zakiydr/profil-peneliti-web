@@ -8,6 +8,7 @@ import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/features/publication_provider.dart';
+import '../../theme/app_colors.dart';
 import 'dashboard_menu_tiles.dart';
 
 class DashboardMenu extends StatelessWidget {
@@ -22,6 +23,7 @@ class DashboardMenu extends StatelessWidget {
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
     return Drawer(
+      backgroundColor: AppColors.lightGrey,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [

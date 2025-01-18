@@ -34,53 +34,60 @@ class OverviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Consumer<ScholarDetailProvider>(builder: (_, scholar, __) {
-      return DynMouseScroll(
-          durationMS: 100,
-          builder: (context, controller, physics) {
-            return ListView(
-              controller: controller,
-              physics: physics,
-              padding: ResponsiveConfig.getPadding(context),
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: ResponsiveConfig.getDeviceType(context) ==
-                              DeviceType.desktop
-                          ? 2
-                          : 1,
-                      child: Column(
-                        children: [
-                          if (ResponsiveConfig.getDeviceType(context) !=
-                              DeviceType.desktop)
-                            _buildSideItems(textTheme, context, scholar),
-                          _buildDashboardTitle(context, textTheme),
-                          space,
-                          _buildQuickStats(scholar),
-                          space,
-                          _buildChartCard(textTheme, scholar, context),
-                          space,
-                          if (ResponsiveConfig.getDeviceType(context) !=
-                              DeviceType.desktop)
-                            _buildMostCitedArticles(scholar, textTheme),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    if (ResponsiveConfig.getDeviceType(context) ==
-                        DeviceType.desktop)
+      return RefreshIndicator(
+        onRefresh: () {
+          // scholar.setSuccess();
+          return scholar.fetchScholarProfile(scholar.scholarDetail?.scholarId);
+        },
+        color: Colors.blue,
+        child: DynMouseScroll(
+            durationMS: 100,
+            builder: (context, controller, physics) {
+              return ListView(
+                controller: controller,
+                physics: physics,
+                padding: ResponsiveConfig.getPadding(context),
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Expanded(
-                        flex: 1,
-                        child: _buildSideItems(textTheme, context, scholar),
+                        flex: ResponsiveConfig.getDeviceType(context) ==
+                                DeviceType.desktop
+                            ? 2
+                            : 1,
+                        child: Column(
+                          children: [
+                            if (ResponsiveConfig.getDeviceType(context) !=
+                                DeviceType.desktop)
+                              _buildSideItems(textTheme, context, scholar),
+                            _buildDashboardTitle(context, textTheme),
+                            space,
+                            _buildQuickStats(scholar),
+                            space,
+                            _buildChartCard(textTheme, scholar, context),
+                            space,
+                            if (ResponsiveConfig.getDeviceType(context) !=
+                                DeviceType.desktop)
+                              _buildMostCitedArticles(scholar, textTheme),
+                          ],
+                        ),
                       ),
-                  ],
-                ),
-              ],
-            );
-          });
+                      SizedBox(
+                        width: 16,
+                      ),
+                      if (ResponsiveConfig.getDeviceType(context) ==
+                          DeviceType.desktop)
+                        Expanded(
+                          flex: 1,
+                          child: _buildSideItems(textTheme, context, scholar),
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            }),
+      );
     });
   }
 
@@ -158,12 +165,12 @@ class OverviewView extends StatelessWidget {
       crossAxisCount: 2,
       children: [
         QuickStatsCard(
-          color: Colors.lightBlue,
+          color: const Color(0xFF03A9F4),
           title: 'h-index',
           content: scholar.scholarDetail?.hindex.toString() ?? '',
         ),
         QuickStatsCard(
-          color: Colors.orangeAccent,
+          color: const Color(0xFFFFAB40),
           title: 'i10-index',
           content: scholar.scholarDetail?.i10Index.toString() ?? '',
         ),

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/theme/app_colors.dart';
 
 import '../utils/responsive.dart';
 
 class AppTheme {
-  static const purple = Color(0xFF7d07bd);
-  static const deepBlue = Color(0xFF0085ff);
-  static const blue = Color(0xFF0099ff);
-  static const lightBlue = Color(0xFF18c3ff);
   static ThemeData getTheme(BuildContext context) {
     return ThemeData(
       fontFamily: 'Inter',
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        primary: purple,
-        secondary: deepBlue,
-        seedColor: blue,
-        background: Colors.blueGrey[100],
+        // primary: purple,
+        // secondary: deepBlue,
+        seedColor: Colors.blue,
+        surface: Colors.white,
       ),
       textTheme: TextTheme(
         displayLarge: TextStyle(
@@ -94,13 +91,18 @@ class AppTheme {
           letterSpacing: 0.5,
         ),
       ),
-      textButtonTheme: TextButtonThemeData(
+      textButtonTheme: const TextButtonThemeData(
         style: ButtonStyle(
-            surfaceTintColor: MaterialStatePropertyAll(deepBlue),
-            foregroundColor: MaterialStatePropertyAll(deepBlue),
-            overlayColor: MaterialStatePropertyAll(lightBlue.withOpacity(.1))),
+            surfaceTintColor: WidgetStatePropertyAll(AppColors.deepBlue),
+            foregroundColor: WidgetStatePropertyAll(AppColors.deepBlue),
+            overlayColor: WidgetStatePropertyAll(AppColors.lightBlue)),
       ),
-      cardTheme: CardTheme(elevation: 2, color: Colors.white),
+      cardTheme: CardTheme(
+        elevation: 0,
+         
+        color: AppColors.lightGrey,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
