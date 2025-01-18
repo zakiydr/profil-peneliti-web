@@ -66,42 +66,8 @@ class MainDashboardView extends StatelessWidget {
                 Expanded(
                   child: menu.pages[menu.selectedIndex],
                 ),
-                _buildFooter(context),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFooter(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      color: Colors.grey[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '© 2025 Your Company Name',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 14,
-            ),
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.help_outline, color: Colors.grey[600]),
-                onPressed: () {},
-                tooltip: 'Help',
-              ),
-              IconButton(
-                icon: Icon(Icons.logout, color: Colors.grey[600]),
-                onPressed: () {},
-                tooltip: 'Logout',
-              ),
-            ],
           ),
         ],
       ),

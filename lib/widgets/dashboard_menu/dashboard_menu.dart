@@ -23,6 +23,7 @@ class DashboardMenu extends StatelessWidget {
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
     return Drawer(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       backgroundColor: AppColors.lightGrey,
       child: Column(
         mainAxisSize: MainAxisSize.max,

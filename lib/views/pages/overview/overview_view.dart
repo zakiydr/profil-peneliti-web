@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:profile_peneliti/views/main_dashboard/main_dashboard_init.dart';
+import 'package:profile_peneliti/widgets/footer.dart';
 import 'package:provider/provider.dart';
 
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
@@ -44,46 +45,54 @@ class OverviewView extends StatelessWidget {
             durationMS: 100,
             builder: (context, controller, physics) {
               return ListView(
-                controller: controller,
-                physics: physics,
-                padding: ResponsiveConfig.getPadding(context),
+                padding: EdgeInsets.zero,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ListView(
+                    shrinkWrap: true,
+                    controller: controller,
+                    physics: physics,
+                    padding: ResponsiveConfig.getPadding(context),
                     children: [
-                      Expanded(
-                        flex: ResponsiveConfig.getDeviceType(context) ==
-                                DeviceType.desktop
-                            ? 2
-                            : 1,
-                        child: Column(
-                          children: [
-                            if (ResponsiveConfig.getDeviceType(context) !=
-                                DeviceType.desktop)
-                              _buildSideItems(textTheme, context, scholar),
-                            _buildDashboardTitle(context, textTheme),
-                            space,
-                            _buildQuickStats(scholar),
-                            space,
-                            _buildChartCard(textTheme, scholar, context),
-                            space,
-                            if (ResponsiveConfig.getDeviceType(context) !=
-                                DeviceType.desktop)
-                              _buildMostCitedArticles(scholar, textTheme),
-                          ],
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: ResponsiveConfig.getDeviceType(context) ==
+                                    DeviceType.desktop
+                                ? 2
+                                : 1,
+                            child: Column(
+                              children: [
+                                if (ResponsiveConfig.getDeviceType(context) !=
+                                    DeviceType.desktop)
+                                  _buildSideItems(textTheme, context, scholar),
+                                _buildDashboardTitle(context, textTheme),
+                                space,
+                                _buildQuickStats(scholar),
+                                space,
+                                _buildChartCard(textTheme, scholar, context),
+                                space,
+                                if (ResponsiveConfig.getDeviceType(context) !=
+                                    DeviceType.desktop)
+                                  _buildMostCitedArticles(scholar, textTheme),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          if (ResponsiveConfig.getDeviceType(context) ==
+                              DeviceType.desktop)
+                            Expanded(
+                              flex: 1,
+                              child:
+                                  _buildSideItems(textTheme, context, scholar),
+                            ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      if (ResponsiveConfig.getDeviceType(context) ==
-                          DeviceType.desktop)
-                        Expanded(
-                          flex: 1,
-                          child: _buildSideItems(textTheme, context, scholar),
-                        ),
                     ],
                   ),
+                  Footer()
                 ],
               );
             }),
