@@ -9,7 +9,7 @@ class Footer extends StatelessWidget {
     final style = Theme.of(context).textTheme;
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      tileColor: AppColors.grey,
+      tileColor: AppColors.lightGrey,
       title:
           Text('2025 \u00a9 STT Terpadu Nurul Fikri', style: style.titleSmall),
       trailing: Image.asset(

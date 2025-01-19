@@ -22,13 +22,9 @@ class MainDashboardView extends StatelessWidget {
             case LoadingStates.initial:
               return Container();
             case LoadingStates.loading:
-              if (scholar.scholarDetail?.scholarId != null) {
-                return _buildBody(context);
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             case LoadingStates.success:
               return _buildBody(context);
             case LoadingStates.error:
@@ -54,7 +50,7 @@ class MainDashboardView extends StatelessWidget {
               flex: 1,
               child: Material(
                 child: DashboardMenu(),
-                elevation: 4,
+                elevation: 0,
                 borderRadius: BorderRadius.circular(16),
               ),
             ),

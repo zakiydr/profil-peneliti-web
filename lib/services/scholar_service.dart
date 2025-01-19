@@ -8,8 +8,10 @@ class ScholarService {
   final dio = Dio(
     BaseOptions(
       baseUrl: _baseUrl,
-      headers: {'Content-Type': 'application/json'},
-      
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin': _baseUrl
+      },
       receiveTimeout: Duration(seconds: 30),
       connectTimeout: Duration(seconds: 30),
     ),
@@ -26,7 +28,7 @@ class ScholarService {
           await dio.get('goscholar/search/', queryParameters: queryParams);
       if (response.statusCode == 200) {
         final Scholars data = Scholars.fromJson(response.data);
-        debugPrint(data.toString());
+        print(data.toString());
         return data;
       }
 
@@ -54,10 +56,10 @@ class ScholarService {
         return data;
       }
 
-      debugPrint(data.toString());
+      print(data.toString());
       throw Exception('Failed to retrieve information');
     } catch (e) {
-      debugPrint('Error fetching scholar detail: $e');
+      print('Error fetching scholar detail: $e');
       throw Exception(e);
     }
   }

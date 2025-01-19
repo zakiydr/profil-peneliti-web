@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badge/flutter_app_badge.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -23,6 +22,7 @@ class DashboardMenu extends StatelessWidget {
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
     return Drawer(
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       backgroundColor: AppColors.lightGrey,
       child: Column(
@@ -34,14 +34,19 @@ class DashboardMenu extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   Container(
-                    color: Colors.white,
+                    color: AppColors.lightGrey,
                     padding: ResponsiveConfig.getPadding(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/logo-sttnf.png',
+                        Image(
+                          image: AssetImage('assets/images/logo-sttnf.png'),
                           width: 60,
+                          errorBuilder: (context, error, stackTrace) {
+                            print('Error loading image: $error');
+                            return const SizedBox(
+                                width: 60, height: 60); // Placeholder
+                          },
                         ),
                         Text(
                           'Scholar Profile',
@@ -94,6 +99,8 @@ class DashboardMenu extends StatelessWidget {
                           TextButton(
                             onPressed: () async {
                               await scholar.saveData();
+                              await scholar.saveId(
+                                  scholar.scholarDetail!.scholarId.toString());
                               await citation.saveCitation(
                                   scholar.scholarDetail!.citedby!.toInt() - 5);
                               await publication.savePubCitations();

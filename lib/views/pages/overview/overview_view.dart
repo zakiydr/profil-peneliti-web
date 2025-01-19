@@ -5,7 +5,9 @@ import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:profile_peneliti/utils/url_launch.dart';
 import 'package:profile_peneliti/views/main_dashboard/main_dashboard_init.dart';
+import 'package:profile_peneliti/views/pages/overview/components/citation_chart.dart';
 import 'package:profile_peneliti/widgets/footer.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +69,6 @@ class OverviewView extends StatelessWidget {
                                     DeviceType.desktop)
                                   _buildSideItems(textTheme, context, scholar),
                                 _buildDashboardTitle(context, textTheme),
-                                space,
                                 _buildQuickStats(scholar),
                                 space,
                                 _buildChartCard(textTheme, scholar, context),
@@ -174,12 +175,14 @@ class OverviewView extends StatelessWidget {
       crossAxisCount: 2,
       children: [
         QuickStatsCard(
-          color: const Color(0xFF03A9F4),
+          img: 'assets/images/stat_card_blue.svg',
+          // color: const Color(0xFF03A9F4),
           title: 'h-index',
           content: scholar.scholarDetail?.hindex.toString() ?? '',
         ),
         QuickStatsCard(
-          color: const Color(0xFFFFAB40),
+          img: 'assets/images/stat_card_orange.svg',
+          // color: const Color(0xFFFFAB40),
           title: 'i10-index',
           content: scholar.scholarDetail?.i10Index.toString() ?? '',
         ),
@@ -195,24 +198,7 @@ class OverviewView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Cited by',
-                  style: textTheme.headlineSmall,
-                ),
-              ],
-            ),
-            Text(
-              scholar.scholarDetail?.citedby.toString() ?? '',
-              style: textTheme.displaySmall,
-            ),
-            Text(
-              'Articles',
-              style: textTheme.bodyLarge,
-            ),
-            _buildBarChart(context),
+            CitationChart(),
           ],
         ),
       ),
@@ -237,7 +223,7 @@ class OverviewView extends StatelessWidget {
       ScholarDetailProvider scholar, TextTheme textTheme) {
     final pubLength = scholar.scholarDetail!.publications!.length;
     return MostCitedArticles(
-      itemCount: pubLength <= 10 ? pubLength : 10,
+      itemCount: pubLength <= 5 ? pubLength : 5,
       itemBuilder: (context, index) {
         return ListTile(
           isThreeLine: true,
@@ -254,150 +240,174 @@ class OverviewView extends StatelessWidget {
                       .toString() ??
                   '',
               style: textTheme.titleMedium),
-          onTap: () {},
+          onTap: () => UrlLaunch().redirectUrl(scholar
+              .scholarDetail!.publications![index].citedbyUrl
+              .toString()),
         );
       },
     );
   }
 
-  Widget _buildBarChart(context) {
-    // late barGroups;
+  // Widget _buildBarChart(context) {
+  //   // late barGroups;
 
-    final scholarDetail =
-        Provider.of<ScholarDetailProvider>(context).scholarDetail;
+  //   final scholarDetail =
+  //       Provider.of<ScholarDetailProvider>(context).scholarDetail;
 
-    // final List<double> citesYearList = [];
+  //   // final List<double> citesYearList = [];
 
-    // scholarDetail?.citesPerYear?.forEach(
-    //   (key, value) => citesYearList.add(value.truncateToDouble()),
-    // );
+  //   // scholarDetail?.citesPerYear?.forEach(
+  //   //   (key, value) => citesYearList.add(value.truncateToDouble()),
+  //   // );
 
-    final List<int> citesYearKeys =
-        scholarDetail?.citesPerYear?.keys.map((e) => int.parse(e)).toList() ??
-            [];
-    final List<double> citesYearValues =
-        scholarDetail?.citesPerYear?.values.map((e) => e.toDouble()).toList() ??
-            [];
+  //   final List<int> citesYearKeys =
+  //       scholarDetail?.citesPerYear?.keys.map((e) => int.parse(e)).toList() ??
+  //           [];
+  //   final List<double> citesYearValues =
+  //       scholarDetail?.citesPerYear?.values.map((e) => e.toDouble()).toList() ??
+  //           [];
 
-    List<MapEntry<int, double>> citesList = List.generate(
-      citesYearKeys.length,
-      (index) => MapEntry(citesYearKeys[index], citesYearValues[index]),
-    );
+  //   List<MapEntry<int, double>> citesList = List.generate(
+  //     citesYearKeys.length,
+  //     (index) => MapEntry(citesYearKeys[index], citesYearValues[index]),
+  //   );
 
-    citesList.sort((a, b) => a.key.compareTo(b.key));
+  //   citesList.sort((a, b) => a.key.compareTo(b.key));
 
-    List<MapEntry<int, double>> latestCitesList = citesList.length > 7
-        ? citesList.sublist(citesList.length - 7)
-        : citesList;
+  //   List<MapEntry<int, double>> latestCitesList = citesList.length > 7
+  //       ? citesList.sublist(citesList.length - 7)
+  //       : citesList;
 
-    final List<int> latestCitesYearKeys =
-        latestCitesList.map((e) => e.key).toList();
-    final List<double> latestCitesYearValues =
-        latestCitesList.map((e) => e.value).toList();
+  //   final List<int> latestCitesYearKeys =
+  //       latestCitesList.map((e) => e.key).toList();
+  //   final List<double> latestCitesYearValues =
+  //       latestCitesList.map((e) => e.value).toList();
 
-    List<BarChartGroupData> generateBarGroups(int length) {
-      if (length == 0) return [];
+  //   List<BarChartGroupData> generateBarGroups(int length) {
+  //     if (length == 0) return [];
 
-      return List.generate(
-        length <= 7 ? length : 7,
-        (index) => BarChartGroupData(
-          x: index,
-          barRods: [
-            BarChartRodData(
-              width: 15,
-              color: Colors.blue,
-              toY: index < latestCitesYearValues.length
-                  ? latestCitesYearValues[index]
-                  : 0,
-            ),
-          ],
-        ),
-      );
-    }
+  //     return List.generate(
+  //       length <= 7 ? length : 7,
+  //       (index) => BarChartGroupData(
+  //         x: index,
+  //         barRods: [
+  //           BarChartRodData(
+  //             width: 15,
+  //             color: Colors.blue,
+  //             toY: index < latestCitesYearValues.length
+  //                 ? latestCitesYearValues[index]
+  //                 : 0,
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
 
-    List<BarChartGroupData> barGroups =
-        generateBarGroups(latestCitesYearKeys.length);
+  //   List<BarChartGroupData> barGroups =
+  //       generateBarGroups(latestCitesYearKeys.length);
 
-    double dynamicMax(double number) {
-      if (number <= 0) return 0;
+  //   double dynamicMax(double number) {
+  //     if (number <= 0) return 0;
 
-      int value = number.ceil();
+  //     int value = number.ceil();
 
-      int magnitude = (log(value) / log(10)).floor();
+  //     int magnitude = (log(value) / log(10)).floor();
 
-      double base = pow(10, magnitude).toDouble();
+  //     double base = pow(10, magnitude).toDouble();
 
-      int firstDigit = (value / base).floor();
+  //     int firstDigit = (value / base).floor();
 
-      if (firstDigit <= 1) return base;
-      if (firstDigit <= 2) return 2 * base;
-      if (firstDigit <= 5) return 5 * base;
-      return 10 * base;
-    }
+  //     if (firstDigit <= 1) return base;
+  //     if (firstDigit <= 2) return 2 * base;
+  //     if (firstDigit <= 5) return 5 * base;
+  //     return 10 * base;
+  //   }
+  //   bool _showTooltips = false;
 
-    return Container(
-      height: 300,
-      padding: const EdgeInsets.all(16),
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          maxY: dynamicMax(citesYearValues.reduce(max)),
-          barTouchData: BarTouchData(
-            enabled: true,
-            touchCallback: (event, response) {},
-            touchTooltipData: BarTouchTooltipData(
-              tooltipHorizontalOffset: 50,
-              getTooltipColor: (group) => Colors.white,
-            ),
-          ),
-          titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  int index = value.toInt();
-                  if (index >= 0 && index < latestCitesYearKeys.length) {
-                    return Text('${latestCitesYearKeys[index]}');
-                  }
-                  return const Text('');
-                },
-              ),
-            ),
-            leftTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  return Text(value.toInt().toString());
-                },
-                reservedSize: 30,
-              ),
-            ),
-          ),
-          gridData: FlGridData(
-            drawVerticalLine: false,
-            getDrawingHorizontalLine: (value) {
-              return FlLine(
-                dashArray: [
-                  10,
-                  0,
-                ],
-                color: Colors.grey.withOpacity(.5),
-                strokeWidth: 1,
-              );
-            },
-            show: true,
-            horizontalInterval: dynamicMax(citesYearValues.reduce(max)) / 10,
-          ),
-          borderData: FlBorderData(
-              show: true, border: Border(bottom: BorderSide(width: .5))),
-          barGroups: barGroups,
-        ),
-      ),
-    );
-  }
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         height: 300,
+  //         padding: const EdgeInsets.all(16),
+  //         child: BarChart(
+  //           BarChartData(
+  //             alignment: BarChartAlignment.spaceAround,
+  //             maxY: dynamicMax(citesYearValues.reduce(max)),
+  //             barTouchData: BarTouchData(
+  //               enabled: true,
+  //               touchCallback: (event, response) {},
+  //               touchTooltipData: BarTouchTooltipData(
+  //                 fitInsideHorizontally: true,
+  //                 fitInsideVertically: false,
+  //                 getTooltipItem: (group, groupIndex, rod, rodIndex) {
+  //                   return BarTooltipItem(
+  //                     '${rod.toY}',
+  //                     const TextStyle(color: Colors.black),
+  //                   );
+  //                 },
+  //                 // tooltipHorizontalOffset: 50,
+  //                 getTooltipColor: (group) => Colors.white,
+  //               ),
+  //             ),
+  //             titlesData: FlTitlesData(
+  //               show: true,
+  //               bottomTitles: AxisTitles(
+  //                 sideTitles: SideTitles(
+  //                   showTitles: true,
+  //                   getTitlesWidget: (value, meta) {
+  //                     int index = value.toInt();
+  //                     if (index >= 0 && index < latestCitesYearKeys.length) {
+  //                       return Text('${latestCitesYearKeys[index]}');
+  //                     }
+  //                     return const Text('');
+  //                   },
+  //                 ),
+  //               ),
+  //               leftTitles:
+  //                   const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+  //               topTitles:
+  //                   const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+  //               rightTitles: AxisTitles(
+  //                 sideTitles: SideTitles(
+  //                   showTitles: true,
+  //                   getTitlesWidget: (value, meta) {
+  //                     return Text(value.toInt().toString());
+  //                   },
+  //                   reservedSize: 30,
+  //                 ),
+  //               ),
+  //             ),
+  //             gridData: FlGridData(
+  //               drawVerticalLine: false,
+  //               getDrawingHorizontalLine: (value) {
+  //                 return FlLine(
+  //                   dashArray: [
+  //                     10,
+  //                     0,
+  //                   ],
+  //                   color: Colors.grey.withOpacity(.5),
+  //                   strokeWidth: 1,
+  //                 );
+  //               },
+  //               show: true,
+  //               horizontalInterval:
+  //                   dynamicMax(citesYearValues.reduce(max)) / 10,
+  //             ),
+  //             borderData: FlBorderData(
+  //                 show: true, border: Border(bottom: BorderSide(width: .5))),
+  //             barGroups: barGroups,
+  //           ),
+  //         ),
+  //       ),
+  //       Checkbox(
+  //         value: _showTooltips,
+  //         onChanged: (bool? value) {
+  //           setState(() {
+  //             _showTooltips = value ?? false;
+  //           });
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 }

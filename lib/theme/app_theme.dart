@@ -95,11 +95,11 @@ class AppTheme {
         style: ButtonStyle(
             surfaceTintColor: WidgetStatePropertyAll(AppColors.deepBlue),
             foregroundColor: WidgetStatePropertyAll(AppColors.deepBlue),
-            overlayColor: WidgetStatePropertyAll(AppColors.lightBlue)),
+            overlayColor:
+                WidgetStatePropertyAll(Color.fromARGB(255, 175, 234, 255))),
       ),
       cardTheme: CardTheme(
         elevation: 0,
-         
         color: AppColors.lightGrey,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),

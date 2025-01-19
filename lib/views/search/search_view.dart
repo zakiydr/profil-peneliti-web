@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -82,24 +83,35 @@ class SearchView extends StatelessWidget {
       }
     }
 
+    double radius = 50;
+
     return ListView.separated(
         padding: EdgeInsets.all(16),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.transparent,
-              backgroundImage: NetworkImage(
-                "${scholars!.authors![index].urlPicture}",
+            leading: ClipOval(
+              // radius: 30,
+              // backgroundColor: Colors.transparent,
+              // child: CachedNetworkImageProvider(
+              //   headers: {
+              //     "Access-Control-Allow-Headers":
+              //         "Access-Control-Allow-Origin, Accept"
+              //   },
+              //   scholars!.authors![index].urlPicture.toString(),
+              // ),
+              child: CachedNetworkImage(
+                height: radius,
+                width: radius,
+                fit: BoxFit.cover,
+                imageUrl: scholars!.authors![index].urlPicture.toString(),
+                httpHeaders: {
+                  "Access-Control-Allow-Headers":
+                      "Access-Control-Allow-Origin, Accept"
+                },
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              child: ClipOval(
-                  // borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                "${scholars.authors![index].urlPicture}",
-                // fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-              )),
             ),
             title: Text(
               scholars.authors![index].name.toString(),

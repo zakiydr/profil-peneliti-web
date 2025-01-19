@@ -5,12 +5,15 @@ import 'package:profile_peneliti/utils/responsive.dart';
 class QuickStatsCard extends StatelessWidget {
   final String title;
   final String content;
-  final Color color;
+  final Color? color;
+
+  final String img;
   const QuickStatsCard({
     Key? key,
     required this.title,
     required this.content,
-    required this.color,
+    this.color,
+    required this.img,
   }) : super(key: key);
 
   @override
@@ -23,9 +26,9 @@ class QuickStatsCard extends StatelessWidget {
         child: Stack(
           children: [
             SvgPicture.asset(
-              'assets/images/stat_card.svg',
+              img,
               fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(color, BlendMode.colorDodge),
+              // colorFilter: ColorFilter.mode(color, BlendMode.colorDodge),
             ),
             Container(
               decoration: BoxDecoration(),
