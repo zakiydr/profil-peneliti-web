@@ -65,16 +65,18 @@ class AppHeader extends StatelessWidget {
       ScholarDetailProvider scholar,
       PublicationProvider publication) {
     final style = Theme.of(context).textTheme;
+
     return FutureBuilder<int>(
-      future: citation
-          .compareTotalCitation(scholar.scholarDetail!.citedby!.toInt()),
+      future: citation.compareTotalCitation(
+          scholar.scholarDetail!.citedby!.toInt(),
+          scholar.scholarDetail!.scholarId.toString()),
       builder: (context, citationSnapshot) {
         if (citationSnapshot.hasData) {
           return Badge(
             offset: Offset(0, 0),
             textStyle: style.labelSmall,
             label: Text('${citationSnapshot.data}'),
-            isLabelVisible: getLabelVisible(citationSnapshot, scholar),
+            isLabelVisible: citationSnapshot.data != 0 ? true : false,
             child: FutureBuilder<int>(
               future: publication.comparePublicationCitations(),
               builder: (context, pubCitationSnapshot) {
@@ -173,29 +175,6 @@ class AppHeader extends StatelessWidget {
     );
   }
 
-//   Future<Map<String, dynamic>> _fetchNotificationData() async {
-//   final citationCount = await citation.compareTotalCitation(
-//       scholar.scholarDetail!.citedby!.toInt());
-//   final pubCitation = await publication.comparePublicationCitations();
-//   final changedPublications = await publication.getChangedPublications();
-//   return {
-//     'citationCount': citationCount,
-//     'pubCitation': pubCitation,
-//     'changedPublications': changedPublications,
-//   };
-// }
-
-  bool getLabelVisible(
-      AsyncSnapshot<int> citationSnapshot, ScholarDetailProvider scholar) {
-    if (citationSnapshot.data! > 0) {
-      return true;
-    }
-    if (citationSnapshot.data == scholar.scholarDetail!.citedby) {
-      return false;
-    }
-    return false;
-  }
-
   Widget _buildSearchButton(BuildContext context, TextTheme textTheme) {
     if (ResponsiveConfig.getDeviceType(context) == DeviceType.desktop) {
       return Container(
@@ -203,6 +182,7 @@ class AppHeader extends StatelessWidget {
             ? 300
             : 200,
         child: TextField(
+          readOnly: true,
           onTap: () {
             context.read<ScholarsProvider>().prepareForSearch();
             Navigator.pushNamed(context, '/search');

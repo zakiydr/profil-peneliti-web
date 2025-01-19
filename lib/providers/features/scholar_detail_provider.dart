@@ -35,6 +35,39 @@ class ScholarDetailProvider extends AppProvider {
     }
   }
 
+  Future<void> saveId(String scholarId) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.containsKey('scholar_id')) {
+      await prefs.remove('scholar_id');
+    }
+
+    await prefs.setString('scholar_id', scholarId);
+
+    notifyListeners();
+  }
+
+  Future<bool> checkId(String scholarId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final savedId = prefs.getString('scholar_id') ?? '';
+
+      final id = scholarId;
+
+      debugPrint('Current Id: $savedId');
+
+      if (id != savedId) {
+        return false;
+      } else {
+        return true;
+      }
+
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<void> saveData() async {
     // if (_scholarDetail == null) return;
 

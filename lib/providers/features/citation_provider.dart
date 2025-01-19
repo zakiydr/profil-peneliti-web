@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badge/flutter_app_badge.dart';
 import 'package:profile_peneliti/providers/app_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/scholar_detail/scholar_detail.dart';
-
 class CitationProvider extends AppProvider {
   // final client = ScholarService();
-
-  ScholarDetail? _scholarDetail;
 
   Future<void> saveCitation(value) async {
     // if (_scholarDetail == null) return;
@@ -24,28 +19,31 @@ class CitationProvider extends AppProvider {
     }
   }
 
-  Future<int> compareTotalCitation(int totalCitation) async {
+  Future<int> compareTotalCitation(
+      int totalCitation, String currentScholarId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      // Retrieve saved citation, default to 0 if not exists
+      // Retrieve the saved scholar ID and citation count
       final savedCitation = prefs.getInt('citation') ?? 0;
+      final savedScholarId = prefs.getString('scholar_id') ?? '';
 
       debugPrint('Comparing Citations:');
+      debugPrint('Saved Scholar ID: $savedScholarId');
+      debugPrint('Current Scholar ID: $currentScholarId');
       debugPrint('Saved Citation: $savedCitation');
       debugPrint('Current Total Citation: $totalCitation');
 
+      // Check if the current scholar ID matches the saved scholar ID
+      if (currentScholarId != savedScholarId) {
+        // Log that IDs are different but do not reset the saved citation
+        debugPrint('IDs are different. No action taken.');
+        return 0; // Return 0 to indicate no notification since IDs do not match
+      }
+
+      // Calculate the notification difference if IDs match
       final notification = totalCitation - savedCitation;
-
       debugPrint('Notification Difference: $notification');
-
-      // if (notification > 0) {
-      //   await prefs.setInt('citation', totalCitation);
-      //   notifyListeners();
-      //   print('Citation updated with new total: $totalCitation');
-      // }
-
-      // FlutterAppBadge.count(notification);
 
       return notification > 0 ? notification : 0;
     } catch (e) {

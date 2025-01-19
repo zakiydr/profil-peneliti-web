@@ -26,8 +26,9 @@ class NotificationPopup extends StatelessWidget {
       icon: Icon(Icons.notifications_rounded),
       itemBuilder: itemBuilder,
       onOpened: () async {
-        final totalCitation = await citation
-            .compareTotalCitation(scholar.scholarDetail!.citedby!.toInt());
+        final totalCitation = await citation.compareTotalCitation(
+            scholar.scholarDetail!.citedby!.toInt(),
+            scholar.scholarDetail!.scholarId.toString());
         await NotificationService.showNotification(
           title: 'Your article(s) has been cited',
           body: 'You have $totalCitation new citation(s)',
