@@ -24,7 +24,7 @@ class QuickStatsWidget extends StatelessWidget {
       childAspectRatio: deviceType == DeviceType.desktop
           ? childAspectRatio
           : deviceType == DeviceType.tablet
-              ? childAspectRatio * 0.8
+              ? childAspectRatio * 0.6
               : childAspectRatio,
       crossAxisCount: 2,
       // maxCrossAxisExtent: ResponsiveConfig.getMaxWidth(context),

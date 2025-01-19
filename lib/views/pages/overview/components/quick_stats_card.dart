@@ -27,7 +27,7 @@ class QuickStatsCard extends StatelessWidget {
           children: [
             SvgPicture.asset(
               img,
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
               // colorFilter: ColorFilter.mode(color, BlendMode.colorDodge),
             ),
             Container(
