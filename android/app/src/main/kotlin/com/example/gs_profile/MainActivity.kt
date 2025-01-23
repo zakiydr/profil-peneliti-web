@@ -1,4 +1,4 @@
-package com.example.gs_profile_clone2
+package com.example.gs_profile
 
 import io.flutter.embedding.android.FlutterActivity
 
