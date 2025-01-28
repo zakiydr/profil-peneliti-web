@@ -31,7 +31,8 @@ class NotificationPopup extends StatelessWidget {
             scholar.scholarDetail!.scholarId.toString());
         await NotificationService.showNotification(
           title: 'Your article(s) has been cited',
-          body: 'You have $totalCitation new citation(s)',
+          body:
+              'You have $totalCitation new citation(s) (This is just a trigger test)',
           payload: "Open the application",
         );
       },

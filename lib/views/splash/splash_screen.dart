@@ -33,14 +33,17 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
 
       if (scholarProvider.scholarDetail != null) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        // Navigator.pushReplacementNamed(context, '/dashboard');
+        Navigator.pushReplacementNamed(context, '/auth');
       } else {
-        Navigator.pushReplacementNamed(context, '/search');
+        // Navigator.pushReplacementNamed(context, '/search');
+        Navigator.pushReplacementNamed(context, '/auth');
       }
     } catch (e) {
       debugPrint('Error during initialization: $e');
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/search');
+        // Navigator.pushReplacementNamed(context, '/search');
+        Navigator.pushReplacementNamed(context, '/auth');
       }
     }
   }

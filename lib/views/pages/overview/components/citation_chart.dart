@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
 class CitationChart extends StatefulWidget {
@@ -18,6 +19,9 @@ class _CitationChartState extends State<CitationChart> {
   @override
   Widget build(BuildContext context) {
     final scholarDetail = context.read<ScholarDetailProvider>().scholarDetail;
+    final textTheme = Theme.of(context).textTheme;
+
+    final deviceType = ResponsiveConfig.getDeviceType(context);
 
     final List<int> citesYearKeys =
         scholarDetail?.citesPerYear?.keys.map(int.parse).toList() ?? [];
@@ -43,9 +47,11 @@ class _CitationChartState extends State<CitationChart> {
       return List.generate(
         displayedCitesList.length,
         (index) => BarChartGroupData(
+          showingTooltipIndicators: [0],
           x: index,
           barRods: [
             BarChartRodData(
+              borderRadius: BorderRadius.circular(0),
               width: 15,
               color: Colors.blue,
               toY: displayedCitesList[index].value,
@@ -72,7 +78,6 @@ class _CitationChartState extends State<CitationChart> {
                   : 10 * base;
     }
 
-    final textTheme = Theme.of(context).textTheme;
     final scholar = context.read<ScholarDetailProvider>();
 
     return Column(
@@ -97,6 +102,9 @@ class _CitationChartState extends State<CitationChart> {
           'Articles',
           style: textTheme.bodyLarge,
         ),
+        SizedBox(
+          height: 30,
+        ),
         Container(
           height: 300,
           child: BarChart(
@@ -108,15 +116,33 @@ class _CitationChartState extends State<CitationChart> {
                 enabled: true,
                 touchCallback: (event, response) {},
                 touchTooltipData: BarTouchTooltipData(
+                  tooltipMargin: 0,
+                  tooltipPadding: EdgeInsets.zero,
                   fitInsideHorizontally: true,
                   fitInsideVertically: false,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    final double _tooltipFontsize = 16;
                     return BarTooltipItem(
-                      '${rod.toY}',
-                      const TextStyle(color: Colors.black),
+                      '${rod.toY.round()}',
+                      TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: deviceType == DeviceType.mobile
+                            ? _tooltipFontsize
+                            : deviceType == DeviceType.tablet
+                                ? _tooltipFontsize * 1.5
+                                : deviceType == DeviceType.desktop
+                                    ? _tooltipFontsize * 3
+                                    : _tooltipFontsize,
+                        shadows: List.generate(
+                            10,
+                            (index) => Shadow(
+                                color: Colors.white,
+                                offset: Offset(0, 0),
+                                blurRadius: 5)),
+                      ),
                     );
                   },
-                  getTooltipColor: (group) => Colors.white,
+                  getTooltipColor: (group) => Colors.transparent,
                 ),
               ),
               titlesData: FlTitlesData(
