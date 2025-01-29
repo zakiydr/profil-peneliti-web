@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 class GoogleAuthService {
   static const _clientId =
       '64704630333-nvmlctudb7973rvfd0mtneqrgdtlvpok.apps.googleusercontent.com';
-  static const _redirectUrl = 'com.example.gsprofile:/oauthredirect';
+  static const _redirectUrl = 'com.example.gsprofile://oauthredirect';
   static const _discoveryUrl =
       'https://accounts.google.com/.well-known/openid-configuration';
 
@@ -20,21 +20,32 @@ class GoogleAuthService {
         AuthorizationTokenRequest(
           _clientId,
           _redirectUrl,
+          discoveryUrl: _discoveryUrl,
+          scopes: ['openid', 'email', 'profile'],
+          promptValues: ['login'],
+          // allowInsecureConnections: true, // Only for testing with HTTP
           serviceConfiguration: AuthorizationServiceConfiguration(
-            authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+            authorizationEndpoint:
+                'https://accounts.google.com/o/oauth2/v2/auth',
             tokenEndpoint: 'https://oauth2.googleapis.com/token',
           ),
-          scopes: ['openid', 'email', 'profile'],
-          promptValues: ['consent'],
         ),
+
+        // AuthorizationTokenRequest(
+        //   _clientId,
+        //   _redirectUrl,
+        //   scopes: ['openid', 'email', 'profile'],
+        //   promptValues: ['consent'],
+        // ),
       );
 
       if (result != null) {
         await Future.wait([
           _secureStorage.write(key: 'access_token', value: result.accessToken),
-          _secureStorage.write(key: 'refresh_token', value: result.refreshToken),
+          _secureStorage.write(
+              key: 'refresh_token', value: result.refreshToken),
         ]);
-        
+
         return await _fetchUserInfo(result.accessToken!);
       }
       return null;
