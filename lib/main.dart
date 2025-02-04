@@ -6,6 +6,7 @@ import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
 import 'package:profile_peneliti/services/notification_service.dart';
 import 'package:profile_peneliti/services/work_manager_service.dart';
+import 'package:profile_peneliti/views/auth/sign_in.dart';
 import 'package:profile_peneliti/views/main_dashboard/main_dashboard_view.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
 import 'package:profile_peneliti/views/pages/articles/articles_view.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => SplashScreen(),
+          '/auth': (context) => SignInScreen(),
           '/search': (context) => SearchView(),
           '/dashboard': (context) => MainDashboardView(),
           '/overview': (context) => OverviewView(),
