@@ -6,28 +6,12 @@ part 'scholars.g.dart';
 @JsonSerializable()
 class Scholars extends Equatable {
     Scholars({
-        required this.count,
-        required this.totalPages,
-        required this.currentPage,
-        required this.nextPage,
-        required this.previousPage,
         required this.authors,
     });
 
-    final int? count;
-
-    @JsonKey(name: 'total_pages') 
-    final int? totalPages;
-
-    @JsonKey(name: 'current_page') 
-    final int? currentPage;
-
-    @JsonKey(name: 'next_page') 
-    final int? nextPage;
-
-    @JsonKey(name: 'previous_page') 
-    final dynamic previousPage;
     final List<Author>? authors;
+    static const String authorsKey = "authors";
+    
 
     factory Scholars.fromJson(Map<String, dynamic> json) => _$ScholarsFromJson(json);
 
@@ -35,7 +19,7 @@ class Scholars extends Equatable {
 
     @override
     List<Object?> get props => [
-    count, totalPages, currentPage, nextPage, previousPage, authors, ];
+    authors, ];
 }
 
 @JsonSerializable()
@@ -54,22 +38,42 @@ class Author extends Equatable {
     });
 
     @JsonKey(name: 'container_type') 
-    final String? containerType;
+    final String containerType;
+    static const String containerTypeKey = "container_type";
+    
     final List<dynamic>? filled;
-    final String? source;
+    static const String filledKey = "filled";
+    
+    final String source;
+    static const String sourceKey = "source";
+    
 
     @JsonKey(name: 'scholar_id') 
-    final String? scholarId;
+    final String scholarId;
+    static const String scholarIdKey = "scholar_id";
+    
 
     @JsonKey(name: 'url_picture') 
-    final String? urlPicture;
-    final String? name;
-    final String? affiliation;
+    final String urlPicture;
+    static const String urlPictureKey = "url_picture";
+    
+    final String name;
+    static const String nameKey = "name";
+    
+    final String affiliation;
+    static const String affiliationKey = "affiliation";
+    
 
     @JsonKey(name: 'email_domain') 
-    final String? emailDomain;
+    final String emailDomain;
+    static const String emailDomainKey = "email_domain";
+    
     final List<String>? interests;
-    final int? citedby;
+    static const String interestsKey = "interests";
+    
+    final int citedby;
+    static const String citedbyKey = "citedby";
+    
 
     factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
 

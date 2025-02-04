@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../models/scholars/scholars.dart';
-import '../../services/scholar_service.dart';
+import '../../services/scholarly_service.dart';
 import '../app_provider.dart';
 
 class ScholarsProvider extends AppProvider {
-  final ScholarService service = ScholarService();
+  final ScholarlyService service = ScholarlyService();
 
   Scholars? _scholars;
   bool _isLoading = false;
@@ -50,13 +50,13 @@ class ScholarsProvider extends AppProvider {
     super.dispose();
   }
 
-  Future<void> fetchScholars(author, page, limit) async {
+  Future<void> fetchScholars(author) async {
     setLoading();
     notifyListeners();
     debugPrint('Retrieving data...');
     try {
-      _scholars = await service.getScholars(author, page, limit);
-      if (scholars?.count == 0) {
+      _scholars = await service.getScholars(author);
+      if (scholars!.authors!.isEmpty) {
         setEmpty();
         notifyListeners();
         debugPrint('No data found');

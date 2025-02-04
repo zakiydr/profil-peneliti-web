@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/scholar_detail/scholar_detail.dart';
-import '../../services/scholar_service.dart';
+import '../../services/scholarly_service.dart';
 import '../app_provider.dart';
 
 class ScholarDetailProvider extends AppProvider {
-  final ScholarService service = ScholarService();
+  final ScholarlyService service = ScholarlyService();
 
   // Scholar
 
