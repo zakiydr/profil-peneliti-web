@@ -55,6 +55,7 @@ class ScholarsProvider extends AppProvider {
     notifyListeners();
     debugPrint('Retrieving data...');
     try {
+      // _scholars = await service.getScholars(author, page, limit);
       _scholars = await service.getScholars(author);
       if (scholars!.authors!.isEmpty) {
         setEmpty();

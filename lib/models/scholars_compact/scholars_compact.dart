@@ -1,32 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'scholars.g.dart';
+part 'scholars_compact.g.dart';
 
 @JsonSerializable()
 class Scholars extends Equatable {
     Scholars({
-        required this.count,
-        required this.totalPages,
-        required this.currentPage,
-        required this.nextPage,
-        required this.previousPage,
         required this.authors,
     });
 
-    final int? count;
-
-    @JsonKey(name: 'total_pages') 
-    final int? totalPages;
-
-    @JsonKey(name: 'current_page') 
-    final int? currentPage;
-
-    @JsonKey(name: 'next_page') 
-    final int? nextPage;
-
-    @JsonKey(name: 'previous_page') 
-    final dynamic previousPage;
     final List<Author>? authors;
 
     factory Scholars.fromJson(Map<String, dynamic> json) => _$ScholarsFromJson(json);
@@ -35,7 +17,7 @@ class Scholars extends Equatable {
 
     @override
     List<Object?> get props => [
-    count, totalPages, currentPage, nextPage, previousPage, authors, ];
+    authors, ];
 }
 
 @JsonSerializable()

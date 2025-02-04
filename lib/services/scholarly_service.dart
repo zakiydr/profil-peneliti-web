@@ -53,7 +53,7 @@ class ScholarlyService {
     };
     try {
       final Response response =
-          await dio.get('goscholar/search/', queryParameters: queryParams);
+          await dio.get('goscholar/search/compact/', queryParameters: queryParams);
       if (response.statusCode == 200) {
         final Scholars data = Scholars.fromJson(response.data);
         print(data.toString());

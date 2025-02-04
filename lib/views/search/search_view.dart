@@ -13,8 +13,8 @@ import '../../widgets/search_textfield.dart';
 class SearchView extends StatelessWidget {
   const SearchView({Key? key}) : super(key: key);
 
-  // final page = 1;
-  // final limit = 10;
+  final page = 1;
+  final limit = 10;
   @override
   Widget build(BuildContext context) {
     final scholarsProvider =
@@ -34,6 +34,7 @@ class SearchView extends StatelessWidget {
                   controller: scholarsProvider.searchController,
                   focusNode: scholarsProvider.searchFocusNode,
                   onSearch: (value) {
+                    // scholarsProvider.fetchScholars(value, page, limit);
                     scholarsProvider.fetchScholars(value);
                   },
                 ),
@@ -75,7 +76,6 @@ class SearchView extends StatelessWidget {
     Scholars? scholars,
     TextTheme textTheme,
   ) {
-
     double radius = 50;
 
     return ListView.separated(
