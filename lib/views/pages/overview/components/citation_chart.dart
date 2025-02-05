@@ -43,9 +43,11 @@ class _CitationChartState extends State<CitationChart> {
       return List.generate(
         displayedCitesList.length,
         (index) => BarChartGroupData(
+          showingTooltipIndicators: [0],
           x: index,
           barRods: [
             BarChartRodData(
+              borderRadius: BorderRadius.circular(0),
               width: 15,
               color: Colors.blue,
               toY: displayedCitesList[index].value,
@@ -97,7 +99,8 @@ class _CitationChartState extends State<CitationChart> {
           'Articles',
           style: textTheme.bodyLarge,
         ),
-        Container(
+        SizedBox(height: 30),
+        SizedBox(
           height: 300,
           child: BarChart(
             BarChartData(
@@ -108,15 +111,25 @@ class _CitationChartState extends State<CitationChart> {
                 enabled: true,
                 touchCallback: (event, response) {},
                 touchTooltipData: BarTouchTooltipData(
+                  tooltipMargin: 0,
+                  tooltipPadding: EdgeInsets.zero,
                   fitInsideHorizontally: true,
                   fitInsideVertically: false,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     return BarTooltipItem(
-                      '${rod.toY}',
-                      const TextStyle(color: Colors.black),
+                      '${rod.toY.round()}',
+                      TextStyle(
+                          fontWeight: FontWeight.bold,
+                          shadows: List.generate(
+                            10,
+                            (index) => Shadow(
+                                blurRadius: 3,
+                                color: Colors.white,
+                                offset: Offset(0, 0)),
+                          )),
                     );
                   },
-                  getTooltipColor: (group) => Colors.white,
+                  getTooltipColor: (group) => Colors.transparent,
                 ),
               ),
               titlesData: FlTitlesData(
