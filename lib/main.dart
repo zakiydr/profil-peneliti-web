@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
+import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/publication_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DashboardMenuProvider()),
         ChangeNotifierProvider(create: (context) => CitationProvider()),
         ChangeNotifierProvider(create: (context) => PublicationProvider()),
+        ChangeNotifierProvider(create: (context) => GoogleAuthProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

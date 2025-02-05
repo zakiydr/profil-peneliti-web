@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
+import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/views/search/search_init.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +20,31 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scholarsProvider =
         Provider.of<ScholarsProvider>(context, listen: false);
+    final googleData = context.read<GoogleAuthProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(googleData.user?.email ?? 'Email'),
+                        Text(googleData.user?.displayName ?? 'Display Name'),
+                        Text(googleData.user?.id ?? 'Id'),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.person))
+        ],
+      ),
       body: SearchInit(
         child: SafeArea(
           child: Column(
@@ -59,8 +82,6 @@ class SearchView extends StatelessWidget {
                             child: Text('Failed retrieving data'),
                           ),
                         );
-                      default:
-                        return Container();
                     }
                   },
                 ),

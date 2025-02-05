@@ -37,13 +37,13 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacementNamed(context, '/dashboard');
       } else {
         // Navigator.pushReplacementNamed(context, '/auth');
-        Navigator.pushReplacementNamed(context, '/search');
+        Navigator.pushReplacementNamed(context, '/auth');
       }
     } catch (e) {
       debugPrint('Error during initialization: $e');
       if (mounted) {
         // Navigator.pushReplacementNamed(context, '/auth');
-        Navigator.pushReplacementNamed(context, '/search');
+        Navigator.pushReplacementNamed(context, '/auth');
       }
     }
   }

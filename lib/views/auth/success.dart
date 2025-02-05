@@ -14,7 +14,7 @@ class LoginSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future signOut() async {
-      final user = await GoogleSignInService.logout();
+      // final user = await GoogleSignInService.logout();
 
       Navigator.pushReplacement(
           context,
