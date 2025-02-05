@@ -20,6 +20,21 @@ class ScholarDetailProvider extends AppProvider {
   String? get lastSavedScholarId => _lastSavedScholarId;
   String? get error => _error;
 
+  Future<void> fetchScholarByName(String name) async {
+    try {
+      setLoading();
+      notifyListeners();
+
+      _scholarDetail = await service.getScholarByName(name);
+
+      setSuccess();
+      notifyListeners();
+    } catch (e) {
+      setError(e.toString());
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchScholarProfile(id) async {
     try {
       setLoading();
@@ -62,7 +77,6 @@ class ScholarDetailProvider extends AppProvider {
       } else {
         return true;
       }
-
     } catch (e) {
       return false;
     }

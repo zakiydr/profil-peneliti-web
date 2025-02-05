@@ -52,8 +52,8 @@ class ScholarlyService {
       "author": author,
     };
     try {
-      final Response response =
-          await dio.get('goscholar/search/compact/', queryParameters: queryParams);
+      final Response response = await dio.get('goscholar/search/compact/',
+          queryParameters: queryParams);
       if (response.statusCode == 200) {
         final Scholars data = Scholars.fromJson(response.data);
         print(data.toString());
@@ -73,6 +73,26 @@ class ScholarlyService {
       throw Exception('Failed to retrieve scholars: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<ScholarDetail> getScholarByName(String author) async {
+    final queryParams = {
+      "author": author,
+    };
+    try {
+      final Response response =
+          await dio.get('goscholar/author/name/', queryParameters: queryParams);
+      final ScholarDetail data = ScholarDetail.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return data;
+      }
+
+      print(data.toString());
+      throw Exception('Failed to retrieve information');
+    } catch (e) {
+      print('Error fetching scholar detail: $e');
+      throw Exception(e);
     }
   }
 

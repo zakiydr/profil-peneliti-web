@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/extension/email_parsing.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -20,7 +21,7 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scholarsProvider =
         Provider.of<ScholarsProvider>(context, listen: false);
-    final googleData = context.read<GoogleAuthProvider>();
+    final google = context.read<GoogleAuthProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -34,9 +35,14 @@ class SearchView extends StatelessWidget {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(googleData.user?.email ?? 'Email'),
-                        Text(googleData.user?.displayName ?? 'Display Name'),
-                        Text(googleData.user?.id ?? 'Id'),
+                        Text(google.user?.email.splitDomain() ?? 'Email'),
+                        Text(google.user?.displayName ?? 'Display Name'),
+                        Text(google.user?.id ?? 'Id'),
+                        TextButton(
+                            onPressed: () {
+                              google.logout();
+                            },
+                            child: Text('Sign out'))
                       ],
                     );
                   },

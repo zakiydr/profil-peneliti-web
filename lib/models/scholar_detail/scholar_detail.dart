@@ -5,18 +5,18 @@ part 'scholar_detail.g.dart';
 
 @JsonSerializable()
 class ScholarDetail extends Equatable {
-    const ScholarDetail({
+    ScholarDetail({
         required this.containerType,
         required this.filled,
-        required this.scholarId,
         required this.source,
-        required this.name,
+        required this.scholarId,
         required this.urlPicture,
+        required this.name,
         required this.affiliation,
-        required this.interests,
         required this.emailDomain,
-        required this.homepage,
+        required this.interests,
         required this.citedby,
+        required this.homepage,
         required this.citedby5Y,
         required this.hindex,
         required this.hindex5Y,
@@ -31,21 +31,21 @@ class ScholarDetail extends Equatable {
     @JsonKey(name: 'container_type') 
     final String? containerType;
     final List<String>? filled;
+    final String? source;
 
     @JsonKey(name: 'scholar_id') 
     final String? scholarId;
-    final String? source;
-    final String? name;
 
     @JsonKey(name: 'url_picture') 
     final String? urlPicture;
+    final String? name;
     final String? affiliation;
-    final List<String>? interests;
 
     @JsonKey(name: 'email_domain') 
     final String? emailDomain;
-    final String? homepage;
+    final List<String>? interests;
     final int? citedby;
+    final String? homepage;
 
     @JsonKey(name: 'citedby5y') 
     final int? citedby5Y;
@@ -74,12 +74,12 @@ class ScholarDetail extends Equatable {
 
     @override
     List<Object?> get props => [
-    containerType, filled, scholarId, source, name, urlPicture, affiliation, interests, emailDomain, homepage, citedby, citedby5Y, hindex, hindex5Y, i10Index, i10Index5Y, citesPerYear, coauthors, publications, publicAccess, ];
+    containerType, filled, source, scholarId, urlPicture, name, affiliation, emailDomain, interests, citedby, homepage, citedby5Y, hindex, hindex5Y, i10Index, i10Index5Y, citesPerYear, coauthors, publications, publicAccess, ];
 }
 
 @JsonSerializable()
 class Coauthor extends Equatable {
-    const Coauthor({
+    Coauthor({
         required this.containerType,
         required this.filled,
         required this.scholarId,
@@ -109,7 +109,7 @@ class Coauthor extends Equatable {
 
 @JsonSerializable()
 class PublicAccess extends Equatable {
-    const PublicAccess({
+    PublicAccess({
         required this.available,
         required this.notAvailable,
     });
@@ -130,7 +130,7 @@ class PublicAccess extends Equatable {
 
 @JsonSerializable()
 class Publication extends Equatable {
-    const Publication({
+    Publication({
         required this.containerType,
         required this.source,
         required this.bib,
@@ -170,7 +170,7 @@ class Publication extends Equatable {
 
 @JsonSerializable()
 class Bib extends Equatable {
-    const Bib({
+    Bib({
         required this.title,
         required this.pubYear,
         required this.citation,

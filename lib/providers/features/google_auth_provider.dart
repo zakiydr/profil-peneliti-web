@@ -5,6 +5,9 @@ import 'package:profile_peneliti/services/google_login_service.dart';
 
 class GoogleAuthProvider extends AppProvider {
   GoogleAuthService googleService = GoogleAuthService();
+
+  final dummyUser = 'sirojul munir nurulfikri.ac.id';
+
   GoogleSignInAccount? _user;
 
   GoogleSignInAccount? get user => _user;
