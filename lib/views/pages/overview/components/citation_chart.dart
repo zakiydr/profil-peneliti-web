@@ -116,14 +116,17 @@ class _CitationChartState extends State<CitationChart> {
                   fitInsideHorizontally: true,
                   fitInsideVertically: false,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    final text = '${rod.toY.round()}';
+
                     return BarTooltipItem(
-                      '${rod.toY.round()}',
+                      text,
                       TextStyle(
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           shadows: List.generate(
                             10,
                             (index) => Shadow(
-                                blurRadius: 3,
+                                blurRadius: 10,
                                 color: Colors.white,
                                 offset: Offset(0, 0)),
                           )),

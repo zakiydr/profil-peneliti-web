@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
+import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/utils/responsive.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
@@ -21,6 +22,7 @@ class DashboardMenu extends StatelessWidget {
     final scholar = context.read<ScholarDetailProvider>();
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
+    final google = context.read<GoogleAuthProvider>();
     return Drawer(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -63,7 +65,7 @@ class DashboardMenu extends StatelessWidget {
                   ),
                   DashboardTiles(
                     leading: Icon(Icons.article_rounded),
-                    title: 'Articles',
+                    title: 'Google Scholar',
                     selected: menu.selectedIndex == 1,
                     onTap: () => menu.goToArticles(context),
                   ),
@@ -82,56 +84,67 @@ class DashboardMenu extends StatelessWidget {
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      final lastSavedScholarId = scholar.lastSavedScholarId;
-
-                      final currentScholarId = scholar.scholarDetail?.scholarId;
-
-                      return AlertDialog(
-                        content: Text('Do you want to save this profile?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('No'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await scholar.saveData();
-                              await scholar.saveId(
-                                  scholar.scholarDetail!.scholarId.toString());
-                              await citation.saveCitation(
-                                  scholar.scholarDetail!.citedby!.toInt() - 5);
-                              await publication.savePubCitations();
-
-                              Navigator.pop(context);
-
-                              if (lastSavedScholarId == currentScholarId) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.orange,
-                                    content: Text('Profile is already saved'),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.green,
-                                    content: Text('Profile saved successfully'),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text('Yes'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  google.logout();
+                  Navigator.pushReplacementNamed(context, '/auth');
                 },
-                child: Text('Save Profile', style: textTheme.bodyMedium),
-              ))
+                child: Text('Sign Out', style: textTheme.bodyMedium),
+              )),
+          // Container(
+          //     padding: EdgeInsets.all(16),
+          //     child: ElevatedButton(
+          //       style:
+          //           ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
+          //       onPressed: () {
+          //         showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             final lastSavedScholarId = scholar.lastSavedScholarId;
+ 
+          //             final currentScholarId = scholar.scholarDetail?.scholarId;
+
+          //             return AlertDialog(
+          //               content: Text('Do you want to save this profile?'),
+          //               actions: [
+          //                 TextButton(
+          //                   onPressed: () => Navigator.pop(context),
+          //                   child: Text('No'),
+          //                 ),
+          //                 TextButton(
+          //                   onPressed: () async {
+          //                     await scholar.saveData();
+          //                     await scholar.saveId(
+          //                         scholar.scholarDetail!.scholarId.toString());
+          //                     await citation.saveCitation(
+          //                         scholar.scholarDetail!.citedby!.toInt() - 5);
+          //                     await publication.savePubCitations();
+
+          //                     Navigator.pop(context);
+
+          //                     if (lastSavedScholarId == currentScholarId) {
+          //                       ScaffoldMessenger.of(context).showSnackBar(
+          //                         SnackBar(
+          //                           backgroundColor: Colors.orange,
+          //                           content: Text('Profile is already saved'),
+          //                         ),
+          //                       );
+          //                     } else {
+          //                       ScaffoldMessenger.of(context).showSnackBar(
+          //                         SnackBar(
+          //                           backgroundColor: Colors.green,
+          //                           content: Text('Profile saved successfully'),
+          //                         ),
+          //                       );
+          //                     }
+          //                   },
+          //                   child: Text('Yes'),
+          //                 ),
+          //               ],
+          //             );
+          //           },
+          //         );
+          //       },
+          //       child: Text('Save Profile', style: textTheme.bodyMedium),
+          //     ))
         ],
       ),
     );
