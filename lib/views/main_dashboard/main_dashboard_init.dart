@@ -16,36 +16,36 @@ class MainDashboardInit extends StatefulWidget {
 }
 
 class _MainDashboardInitState extends State<MainDashboardInit> {
-  late ScholarDetailProvider _scholarProvider;
+  // late ScholarDetailProvider _scholarProvider;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _scholarProvider =
-        Provider.of<ScholarDetailProvider>(context, listen: false);
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _scholarProvider =
+  //       Provider.of<ScholarDetailProvider>(context, listen: false);
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    final publication =
-        Provider.of<PublicationProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      publication.setScholarDetail(_scholarProvider.scholarDetail);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final publication =
+  //       Provider.of<PublicationProvider>(context, listen: false);
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     publication.setScholarDetail(_scholarProvider.scholarDetail);
 
-      _initializeData();
-    });
-  }
+  //     _initializeData();
+  //   });
+  // }
 
-  Future<void> _initializeData() async {
-    if (!mounted) return;
+  // Future<void> _initializeData() async {
+  //   if (!mounted) return;
 
-    final scholar = Provider.of<ScholarDetailProvider>(context, listen: false);
-    // publication.setScholarDetail(scholar.scholarDetail);
-    if (scholar.scholarDetail == null) {
-      Navigator.of(context).pushReplacementNamed('/search');
-    }
-  }
+  //   final scholar = Provider.of<ScholarDetailProvider>(context, listen: false);
+  //   // publication.setScholarDetail(scholar.scholarDetail);
+  //   if (scholar.scholarDetail == null) {
+  //     Navigator.of(context).pushReplacementNamed('/search');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

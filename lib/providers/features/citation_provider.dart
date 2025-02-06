@@ -19,6 +19,15 @@ class CitationProvider extends AppProvider {
     }
   }
 
+  // Future<void> removeCitation() async {
+  //   final prefs = await SharedPreferences.getInstance();
+
+  //   if (!prefs.containsKey('citation')) {
+  //     print('No data exist');
+  //   }
+  //   await prefs.remove
+  // }
+
   Future<int> compareTotalCitation(
       int totalCitation, String currentScholarId) async {
     try {

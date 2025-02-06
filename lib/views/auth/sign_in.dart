@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
+import 'package:profile_peneliti/providers/features/publication_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/services/google_login_service.dart';
 import 'package:profile_peneliti/views/auth/success.dart';
@@ -14,6 +16,8 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final googleAuth = context.read<GoogleAuthProvider>();
     final scholarly = context.read<ScholarDetailProvider>();
+    final citation = context.read<CitationProvider>();
+    final publication = context.read<PublicationProvider>();
     return Scaffold(
       body: Center(
         child: Column(
@@ -26,10 +30,17 @@ class SignInScreen extends StatelessWidget {
                 },
                 child: Text('Sign in with Google')),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pushNamed('/dashboard');
 
                   scholarly.fetchScholarByName(googleAuth.dummyUser);
+                  
+                  await scholarly.saveData();
+                  await scholarly
+                      .saveId(scholarly.scholarDetail!.scholarId.toString());
+                  await citation.saveCitation(
+                      scholarly.scholarDetail!.citedby!.toInt() - 5);
+                  await publication.savePubCitations();
                 },
                 child: Text('Sign in with dummy')),
           ],

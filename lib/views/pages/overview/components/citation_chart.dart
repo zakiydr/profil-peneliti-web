@@ -121,7 +121,7 @@ class _CitationChartState extends State<CitationChart> {
                     return BarTooltipItem(
                       text,
                       TextStyle(
-                          fontSize: 20,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           shadows: List.generate(
                             10,

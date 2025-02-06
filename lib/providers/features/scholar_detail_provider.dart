@@ -99,6 +99,19 @@ class ScholarDetailProvider extends AppProvider {
     notifyListeners();
   }
 
+  Future<void> removeData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey('scholar_detail') ||
+        !prefs.containsKey('scholar_id')) {
+      print('No data exist');
+    }
+
+    await prefs.clear();
+
+    notifyListeners();
+  }
+
   Future<void> updateSavedProfile() async {
     try {
       if (_lastSavedScholarId != null) {

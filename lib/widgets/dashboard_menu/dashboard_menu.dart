@@ -19,7 +19,7 @@ class DashboardMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final scholar = context.read<ScholarDetailProvider>();
+    final scholarly = context.read<ScholarDetailProvider>();
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
     final google = context.read<GoogleAuthProvider>();
@@ -85,6 +85,7 @@ class DashboardMenu extends StatelessWidget {
                     ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
                 onPressed: () {
                   google.logout();
+                  scholarly.removeData();
                   Navigator.pushReplacementNamed(context, '/auth');
                 },
                 child: Text('Sign Out', style: textTheme.bodyMedium),
@@ -99,7 +100,7 @@ class DashboardMenu extends StatelessWidget {
           //           context: context,
           //           builder: (context) {
           //             final lastSavedScholarId = scholar.lastSavedScholarId;
- 
+
           //             final currentScholarId = scholar.scholarDetail?.scholarId;
 
           //             return AlertDialog(
