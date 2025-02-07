@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:profile_peneliti/services/google_login_service.dart';
+import 'package:profile_peneliti/services/google_auth_service.dart';
 import 'package:profile_peneliti/views/auth/sign_in.dart';
 
 class LoginSuccess extends StatelessWidget {
@@ -29,7 +29,7 @@ class LoginSuccess extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Image.network(user.photoUrl!),
-            Text(user.displayName!),
+            Text(user.displayName.toString()),
             Text(user.email),
             Text(user.id),
             Container(

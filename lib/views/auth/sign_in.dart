@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/publication_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
-import 'package:profile_peneliti/services/google_login_service.dart';
+import 'package:profile_peneliti/services/google_auth_service.dart';
 import 'package:profile_peneliti/views/auth/success.dart';
 import 'package:profile_peneliti/views/search/search_view.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class SignInScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed('/dashboard');
 
                   scholarly.fetchScholarByName(googleAuth.dummyUser);
-                  
+
                   await scholarly.saveData();
                   await scholarly
                       .saveId(scholarly.scholarDetail!.scholarId.toString());
