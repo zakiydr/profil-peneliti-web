@@ -16,9 +16,9 @@
         </intent>
       </queries>
     <application
-        android:label="profile_peneliti"
+        android:label="Scholar Profile"
         android:name="${applicationName}"
-        android:icon="@mipmap/sttnf_icon">
+        android:icon="@mipmap/icon_app">
         <activity
             android:name=".MainActivity"
             android:exported="true"
