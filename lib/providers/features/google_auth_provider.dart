@@ -1,36 +1,60 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:profile_peneliti/providers/app_provider.dart';
 import 'package:profile_peneliti/services/google_auth_service.dart';
 
 class GoogleAuthProvider extends AppProvider {
-  GoogleAuthService googleService = GoogleAuthService();
-
-  final dummyUser = 'sirojul munir nurulfikri.ac.id';
-
+  final GoogleAuthService _googleService;
+  StreamSubscription? _userSubscription;
   GoogleSignInAccount? _user;
+
+  GoogleAuthProvider([GoogleAuthService? googleService])
+      : _googleService = googleService ?? GoogleAuthService() {
+    _userSubscription =
+        _googleService.onCurrentUserChanged.listen(_handleUserChanged);
+    _googleService.signInSilently();
+  }
 
   GoogleSignInAccount? get user => _user;
 
-// In GoogleAuthProvider
-  Future<GoogleSignInAccount?> login(BuildContext context) async {
-    try {
-      final user = await googleService.signIn();
-      if (user == null) {
-        // ScaffoldMessenger.of(context).showSnackBar(...);
-        return null;
-      }
-      _user = user;
+  Future<void> _handleUserChanged(GoogleSignInAccount? user) async {
+    if (user == null) {
+      _user = null;
       notifyListeners();
-      Navigator.of(context).pushReplacementNamed('/search');
-      return user;
+      return;
+    }
+
+    if (kIsWeb && !(await _googleService.canAccessScopes())) {
+      if (!(await _googleService.requestScopes())) {
+        await _googleService.signOut();
+        return;
+      }
+    }
+
+    _user = user;
+    notifyListeners();
+  }
+
+  Future<GoogleSignInAccount?> login() async {
+    try {
+      return await _googleService.signIn();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      print('Failed Sign in: $e');
       return null;
     }
   }
 
-  Future<GoogleSignInAccount?> logout() => googleService.signOut();
+  Future<void> logout() async {
+    await _googleService.signOut();
+    _user = null;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _userSubscription?.cancel();
+    super.dispose();
+  }
 }
