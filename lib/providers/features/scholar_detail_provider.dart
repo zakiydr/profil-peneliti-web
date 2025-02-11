@@ -16,6 +16,8 @@ class ScholarDetailProvider extends AppProvider {
   String? _error;
   String? _lastSavedScholarId;
 
+  String dummyName = 'sirojul munir nurulfikri.ac.id';
+
   ScholarDetail? get scholarDetail => _scholarDetail;
   String? get lastSavedScholarId => _lastSavedScholarId;
   String? get error => _error;

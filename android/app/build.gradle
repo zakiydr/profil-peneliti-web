@@ -50,6 +50,12 @@ android {
             storeFile file('schprofile.jks')
             storePassword 'android'
         }
+        release {
+            keyAlias 'androidreleasekey'
+            keyPassword 'android'
+            storeFile file('schprofile-release.jks')
+            storePassword 'android'
+        }
     }
 
     defaultConfig {
@@ -65,6 +71,14 @@ android {
     }
 
     buildTypes {
+        release {
+            // Use the release signing configuration
+            signingConfig signingConfigs.release
+
+            // Initialize ProGuard (code shrinking and obfuscation)
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         debug {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.

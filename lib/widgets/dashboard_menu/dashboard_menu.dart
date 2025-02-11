@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/extension/email_parsing.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
@@ -7,6 +8,8 @@ import 'package:profile_peneliti/utils/responsive.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/app_images.dart';
+import '../../constants/app_routes.dart';
 import '../../providers/features/publication_provider.dart';
 import '../../theme/app_colors.dart';
 import 'dashboard_menu_tiles.dart';
@@ -22,7 +25,7 @@ class DashboardMenu extends StatelessWidget {
     final scholarly = context.read<ScholarDetailProvider>();
     final citation = context.read<CitationProvider>();
     final publication = context.read<PublicationProvider>();
-    final google = context.read<GoogleAuthProvider>();
+    final auth = context.read<GoogleAuthProvider>();
     return Drawer(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -42,7 +45,7 @@ class DashboardMenu extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image(
-                          image: AssetImage('assets/images/logo-sttnf.png'),
+                          image: AssetImage(AppImages.appIcon),
                           width: 60,
                           errorBuilder: (context, error, stackTrace) {
                             print('Error loading image: $error');
@@ -69,6 +72,12 @@ class DashboardMenu extends StatelessWidget {
                     selected: menu.selectedIndex == 1,
                     onTap: () => menu.goToArticles(context),
                   ),
+                  Column(
+                    children: [
+                      Text(
+                          '${auth.user!.displayName} ${auth.user!.email.splitDomain()}')
+                    ],
+                  )
                   // DashboardTiles(
                   //   title: 'Citation',
                   //   selected: menu.selectedIndex == 2,
@@ -83,10 +92,10 @@ class DashboardMenu extends StatelessWidget {
               child: ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
-                onPressed: () {
-                  google.logout();
+                onPressed: () async {
+                  await auth.logout();
                   scholarly.removeData();
-                  Navigator.pushReplacementNamed(context, '/auth');
+                  Navigator.pushReplacementNamed(context, AppRoutes.login);
                 },
                 child: Text('Sign Out', style: textTheme.bodyMedium),
               )),

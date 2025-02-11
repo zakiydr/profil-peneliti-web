@@ -7,6 +7,7 @@ import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart
 import 'package:profile_peneliti/views/search/search_init.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/app_routes.dart';
 import '../../providers/app_provider.dart';
 import '../../providers/features/scholars_provider.dart';
 import '../../utils/responsive.dart';
@@ -145,7 +146,7 @@ class SearchView extends StatelessWidget {
               final scholarDetailProvider =
                   context.read<ScholarDetailProvider>();
 
-              Navigator.of(context).pushNamed('/dashboard');
+              Navigator.of(context).pushNamed(AppRoutes.dashboard);
 
               scholarDetailProvider
                   .fetchScholarProfile(scholars.authors![index].scholarId)

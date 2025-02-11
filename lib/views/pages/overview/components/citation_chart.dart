@@ -124,9 +124,9 @@ class _CitationChartState extends State<CitationChart> {
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           shadows: List.generate(
-                            10,
+                            5,
                             (index) => Shadow(
-                                blurRadius: 10,
+                                blurRadius: 5,
                                 color: Colors.white,
                                 offset: Offset(0, 0)),
                           )),
