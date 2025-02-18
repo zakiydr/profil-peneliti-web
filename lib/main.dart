@@ -6,9 +6,10 @@ import 'package:profile_peneliti/providers/features/publication_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
 import 'package:profile_peneliti/services/notification_service.dart';
-import 'package:profile_peneliti/services/work_manager_service.dart';
+import 'package:profile_peneliti/services/workmanager_service.dart';
 import 'package:profile_peneliti/views/auth/login_redirect.dart';
 import 'package:profile_peneliti/views/auth/sign_in.dart';
+import 'package:profile_peneliti/views/main_dashboard/main_dashboard_init.dart';
 import 'package:profile_peneliti/views/main_dashboard/main_dashboard_view.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
 import 'package:profile_peneliti/views/pages/articles/articles_view.dart';
@@ -23,23 +24,12 @@ import 'views/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Workmanager().initialize(
-  //   WorkManagerService.callbackDispatcher,
-  //   isInDebugMode: true,
-  // );
+
   NotificationService.initNotification;
 
-  // Workmanager().registerPeriodicTask(
-  //   "1",
-  //   'fetchScholarDetail',
-  //   frequency: Duration(seconds: 15),
-  //   existingWorkPolicy: ExistingWorkPolicy.keep,
-  //   constraints: Constraints(
-  //     networkType: NetworkType.connected,
-  //   ),
-  // );
+  await WorkmanagerService.initialize();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -62,10 +52,10 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.splash,
         routes: {
           AppRoutes.splash: (context) => SplashScreen(),
-          AppRoutes.login: (context) => SignInScreen(),
-          AppRoutes.loginRedirect: (context) => LoginRedirect(),
-          AppRoutes.search: (context) => SearchView(),
-          AppRoutes.dashboard: (context) => MainDashboardView(),
+          AppRoutes.login: (context) => const SignInScreen(),
+          AppRoutes.loginRedirect: (context) => const LoginRedirect(),
+          AppRoutes.search: (context) => const SearchView(),
+          AppRoutes.dashboard: (context) => const MainDashboardInit(),
           AppRoutes.overview: (context) => OverviewView(),
           AppRoutes.articles: (context) => const ArticlesView(),
         },

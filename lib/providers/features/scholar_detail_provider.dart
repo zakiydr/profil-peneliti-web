@@ -1,27 +1,63 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/services/workmanager_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/scholar_detail/scholar_detail.dart';
 import '../../services/scholarly_service.dart';
 import '../app_provider.dart';
 
+/// Provider to manage scholar details and background updates.
 class ScholarDetailProvider extends AppProvider {
   final ScholarlyService service = ScholarlyService();
 
-  // Scholar
+  //Never Remove
+  String dummyName = 'sirojul munir nurulfikri.ac.id';
+
+  SharedPreferences? _prefs;
 
   ScholarDetail? _scholarDetail;
-  String? _error;
+
   String? _lastSavedScholarId;
 
-  String dummyName = 'sirojul munir nurulfikri.ac.id';
+  bool _backgroundUpdateEnabled = false;
+
+  String? _error;
 
   ScholarDetail? get scholarDetail => _scholarDetail;
   String? get lastSavedScholarId => _lastSavedScholarId;
   String? get error => _error;
+  bool get backgroundUpdateEnabled => _backgroundUpdateEnabled;
 
+  /// Initializes the provider by loading cached data.
+  ScholarDetailProvider() {
+    _initializePreferences();
+  }
+
+  /// Initializes SharedPreferences instance.
+  Future<void> _initializePreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    await loadData();
+  }
+
+  /// Toggles background updates for scholar details.
+  ///
+  /// If [enable] is provided, sets the background update state accordingly.
+  /// Otherwise, toggles the current state.
+  Future<void> toggleBackgroundUpdate(String authorName, {bool? enable}) async {
+    _backgroundUpdateEnabled = enable ?? !_backgroundUpdateEnabled;
+
+    if (_backgroundUpdateEnabled) {
+      await WorkmanagerService.startPeriodicUpdate(authorName);
+    } else {
+      await WorkmanagerService.stopPeriodicUpdate();
+    }
+
+    notifyListeners();
+  }
+
+  /// Fetches scholar details by [name] and updates the state.
   Future<void> fetchScholarByName(String name) async {
     try {
       setLoading();
@@ -30,6 +66,8 @@ class ScholarDetailProvider extends AppProvider {
       _scholarDetail = await service.getScholarByName(name);
 
       setSuccess();
+      await saveId(_scholarDetail!.scholarId!);
+      await saveData();
       notifyListeners();
     } catch (e) {
       setError(e.toString());
@@ -37,7 +75,8 @@ class ScholarDetailProvider extends AppProvider {
     }
   }
 
-  Future<void> fetchScholarProfile(id) async {
+  /// Fetches scholar profile by [id] and updates the state.
+  Future<void> fetchScholarProfile(String id) async {
     try {
       setLoading();
       notifyListeners();
@@ -45,6 +84,8 @@ class ScholarDetailProvider extends AppProvider {
       _scholarDetail = await service.getScholarDetail(id);
 
       setSuccess();
+      await saveId(_scholarDetail!.scholarId!);
+      await saveData();
       notifyListeners();
     } catch (e) {
       setError(e.toString());
@@ -52,73 +93,59 @@ class ScholarDetailProvider extends AppProvider {
     }
   }
 
+  /// Saves the [scholarId] to SharedPreferences.
   Future<void> saveId(String scholarId) async {
-    final prefs = await SharedPreferences.getInstance();
+    if (_prefs == null) return;
 
-    if (prefs.containsKey('scholar_id')) {
-      await prefs.remove('scholar_id');
-    }
-
-    await prefs.setString('scholar_id', scholarId);
-
+    await _prefs!.setString('scholar_id', scholarId);
     notifyListeners();
   }
 
+  /// Checks if the provided [scholarId] matches the saved ID.
   Future<bool> checkId(String scholarId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      if (_prefs == null) return false;
 
-      final savedId = prefs.getString('scholar_id') ?? '';
-
-      final id = scholarId;
-
+      final savedId = _prefs!.getString('scholar_id') ?? '';
       debugPrint('Current Id: $savedId');
 
-      if (id != savedId) {
-        return false;
-      } else {
-        return true;
-      }
+      return scholarId == savedId;
     } catch (e) {
       return false;
     }
   }
 
+  /// Saves the current scholar details to SharedPreferences.
   Future<void> saveData() async {
-    // if (_scholarDetail == null) return;
+    if (_scholarDetail == null || _prefs == null) return;
 
-    final prefs = await SharedPreferences.getInstance();
-
-    if (prefs.containsKey('scholar_detail')) {
-      await prefs.remove('scholar_detail');
-    }
-
-    await prefs.setString(
-        'scholar_detail', jsonEncode(_scholarDetail!.toJson()));
+    await _prefs!.setString(
+      'scholar_detail',
+      jsonEncode(_scholarDetail!.toJson()),
+    );
 
     _lastSavedScholarId = _scholarDetail!.scholarId;
-
     notifyListeners();
   }
 
+  /// Removes all cached data from SharedPreferences.
   Future<void> removeData() async {
-    final prefs = await SharedPreferences.getInstance();
+    if (_prefs == null) return;
 
-    if (!prefs.containsKey('scholar_detail') ||
-        !prefs.containsKey('scholar_id')) {
-      print('No data exist');
-    }
+    await _prefs!.remove('scholar_detail');
+    await _prefs!.remove('scholar_id');
 
-    await prefs.clear();
-
+    _scholarDetail = null;
+    _lastSavedScholarId = null;
     notifyListeners();
   }
 
+  /// Updates the saved profile with the latest data from the service.
   Future<void> updateSavedProfile() async {
     try {
       if (_lastSavedScholarId != null) {
         final latestScholarDetail =
-            await service.getScholarDetail(_lastSavedScholarId.toString());
+            await service.getScholarDetail(_lastSavedScholarId!);
 
         _scholarDetail = latestScholarDetail;
         await saveData();
@@ -129,15 +156,14 @@ class ScholarDetailProvider extends AppProvider {
     }
   }
 
+  /// Loads scholar data from SharedPreferences.
   Future<void> loadData() async {
     try {
       setLoading();
-      final prefs = await SharedPreferences.getInstance();
-      final jsonString = prefs.getString('scholar_detail');
+      final jsonString = _prefs?.getString('scholar_detail');
 
       if (jsonString != null) {
         _scholarDetail = ScholarDetail.fromJson(jsonDecode(jsonString));
-
         _lastSavedScholarId = _scholarDetail!.scholarId;
         setSuccess();
       } else {
@@ -147,7 +173,6 @@ class ScholarDetailProvider extends AppProvider {
       }
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
       setError(e.toString());
       notifyListeners();
     }
