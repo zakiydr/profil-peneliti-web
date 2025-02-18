@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
@@ -27,7 +28,9 @@ void main() async {
 
   NotificationService.initNotification;
 
-  await WorkmanagerService.initialize();
+  if (!kIsWeb) {
+    await WorkmanagerService.initialize();
+  }
 
   runApp(const MyApp());
 }

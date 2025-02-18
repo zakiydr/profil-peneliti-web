@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                 imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                 child: Container(
                   child: Image.asset(
-                    'assets/images/background.jpg',
+                    AppImages.webBackground,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,

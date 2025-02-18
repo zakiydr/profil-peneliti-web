@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/views/about/about_view.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
 import 'package:profile_peneliti/views/pages/articles/articles_view.dart';
 import 'package:profile_peneliti/views/search/search_view.dart';
@@ -13,7 +14,7 @@ class DashboardMenuProvider extends AppProvider {
   final _pages = [
     OverviewView(),
     const ArticlesView(),
-    const SearchView(),
+    const AboutView(),
   ];
 
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
@@ -38,5 +39,5 @@ class DashboardMenuProvider extends AppProvider {
 
   void goToOverview(BuildContext context) => setSelectedIndex(context, 0);
   void goToArticles(BuildContext context) => setSelectedIndex(context, 1);
-  void goToCitations(BuildContext context) => setSelectedIndex(context, 2);
+  void goToAbout(BuildContext context) => setSelectedIndex(context, 2);
 }

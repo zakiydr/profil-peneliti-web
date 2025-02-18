@@ -7,6 +7,7 @@ import 'package:profile_peneliti/providers/features/publication_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
 import 'package:profile_peneliti/utils/url_launch.dart';
+import 'package:profile_peneliti/widgets/articles_detail_card.dart';
 import 'package:profile_peneliti/widgets/notification_popup.dart';
 import 'package:provider/provider.dart';
 
@@ -23,12 +24,12 @@ class AppHeader extends StatelessWidget {
     final publication =
         Provider.of<PublicationProvider>(context, listen: false);
     return Card(
-      shape: const ContinuousRectangleBorder(),
+      shape: ContinuousRectangleBorder(),
       margin: EdgeInsets.zero,
       color: Colors.transparent,
       elevation: 0,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,7 +43,7 @@ class AppHeader extends StatelessWidget {
                           .read<DashboardMenuProvider>()
                           .controlMenu(context);
                     },
-                    icon: const Icon(Icons.menu),
+                    icon: Icon(Icons.menu),
                   ),
                 _buildSearchButton(context, textTheme),
               ],
@@ -73,7 +74,7 @@ class AppHeader extends StatelessWidget {
       builder: (context, citationSnapshot) {
         if (citationSnapshot.hasData) {
           return Badge(
-            offset: const Offset(0, 0),
+            offset: Offset(0, 0),
             textStyle: style.labelSmall,
             label: Text('${citationSnapshot.data}'),
             isLabelVisible: citationSnapshot.data != 0 ? true : false,
@@ -90,21 +91,21 @@ class AppHeader extends StatelessWidget {
 
                         return [
                           PopupMenuItem(
-                            padding: const EdgeInsets.all(16),
-                            enabled: false,
+                            padding: EdgeInsets.all(16),
                             child:
                                 Text('Notifications', style: style.titleLarge),
+                            enabled: false,
                           ),
                           PopupMenuItem(
                             padding: EdgeInsets.zero,
                             enabled: false,
                             child: changedPublications.isEmpty
-                                ? const Center(child: Text('No new citations'))
-                                : SizedBox(
+                                ? Center(child: Text('No new citations'))
+                                : Container(
                                     width: 500,
                                     height: 400,
                                     child: ListView.separated(
-                                      padding: const EdgeInsets.all(16),
+                                      padding: EdgeInsets.all(16),
                                       shrinkWrap: true,
                                       itemCount: changedPublications.length,
                                       itemBuilder: (context, index) {
@@ -122,15 +123,14 @@ class AppHeader extends StatelessWidget {
                                             text: TextSpan(
                                               style: style.bodyMedium,
                                               children: [
-                                                const TextSpan(
-                                                    text: 'You have '),
+                                                TextSpan(text: 'You have '),
                                                 TextSpan(
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600),
                                                     text:
                                                         "${publication.numCitations.toString()} "),
-                                                const TextSpan(
+                                                TextSpan(
                                                     text:
                                                         "new citations on your article entitled "),
                                                 TextSpan(
@@ -151,12 +151,11 @@ class AppHeader extends StatelessWidget {
                                           },
                                         );
                                       },
-                                      separatorBuilder: (_, __) =>
-                                          const Divider(),
+                                      separatorBuilder: (_, __) => Divider(),
                                     ),
                                   ),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             enabled: false,
                             child: Divider(
                               height: 2,
@@ -165,21 +164,30 @@ class AppHeader extends StatelessWidget {
                         ];
                       });
                     }
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   },
                 );
               },
             ),
           );
         }
-        return const SizedBox.shrink();
+        return SizedBox.shrink();
       },
     );
   }
 
+  InputDecoration _searchFieldDecoration() {
+    return InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        prefixIcon: Icon(Icons.search),
+        hintText: 'Search Scholar...');
+  }
+
   Widget _buildSearchButton(BuildContext context, TextTheme textTheme) {
     if (ResponsiveConfig.getDeviceType(context) == DeviceType.desktop) {
-      return SizedBox(
+      return Container(
         width: ResponsiveConfig.getDeviceType(context) == DeviceType.desktop
             ? 300
             : 200,
@@ -190,6 +198,7 @@ class AppHeader extends StatelessWidget {
             Navigator.pushNamed(context, AppRoutes.search);
           },
           style: textTheme.bodyMedium,
+          decoration: _searchFieldDecoration(),
         ),
       );
     }
@@ -198,6 +207,6 @@ class AppHeader extends StatelessWidget {
           context.read<ScholarsProvider>().prepareForSearch();
           Navigator.pushNamed(context, AppRoutes.search);
         },
-        icon: const Icon(Icons.search_rounded));
+        icon: Icon(Icons.search_rounded));
   }
 }

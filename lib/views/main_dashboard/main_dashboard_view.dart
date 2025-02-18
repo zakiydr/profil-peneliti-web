@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/constants/app_routes.dart';
 import 'package:profile_peneliti/providers/app_provider.dart';
+import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,7 @@ class MainDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scholar = context.read<ScholarDetailProvider>();
+    final auth = context.read<GoogleAuthProvider>();
     return Scaffold(
       drawer: const DashboardMenu(),
       floatingActionButton: _buildFloatingButton(context, scholar),
@@ -38,9 +40,10 @@ class MainDashboardView extends StatelessWidget {
                   children: [
                     const Text('Unexpected error'),
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await auth.logout();
                           Navigator.pushReplacementNamed(
-                              context, AppRoutes.dashboard);
+                              context, AppRoutes.login);
                         },
                         child: const Text('Back'))
                   ],

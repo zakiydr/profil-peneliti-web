@@ -78,6 +78,12 @@ class DashboardMenu extends StatelessWidget {
                     selected: menu.selectedIndex == 1,
                     onTap: () => menu.goToArticles(context),
                   ),
+                  DashboardTiles(
+                    leading: Icon(Icons.info_outline_rounded),
+                    title: 'About',
+                    selected: menu.selectedIndex == 2,
+                    onTap: () => menu.goToAbout(context),
+                  ),
                   // Column(
                   //   children: [
                   //     Text(

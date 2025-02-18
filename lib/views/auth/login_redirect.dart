@@ -33,8 +33,8 @@ class _LoginRedirectState extends State<LoginRedirect> {
 
     final name = '${auth.user?.displayName} ${auth.user?.email.splitDomain()}';
 
+    auth.login();
     try {
-      auth.login();
       await scholarly.fetchScholarByName(scholarly.dummyName);
       scholarly.saveData();
       scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());

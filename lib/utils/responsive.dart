@@ -36,7 +36,7 @@ class ResponsiveConfig {
     switch (getDeviceType(context)) {
       case DeviceType.mobile:
         return const EdgeInsets.symmetric(
-          horizontal: 8.0,
+          horizontal: 16.0,
           vertical: 8.0,
         );
       case DeviceType.tablet:

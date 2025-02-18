@@ -6,4 +6,5 @@ class AppImages {
 
   static const String appIcon = 'assets/images/icon_app.png';
   static const String gsIcon = 'assets/images/google_scholar_logo.png';
+  static const String sttnfIcon = 'assets/images/logo-sttnf.png';
 }

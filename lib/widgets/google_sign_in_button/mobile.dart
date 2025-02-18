@@ -11,6 +11,7 @@ Widget buildSignInButton(BuildContext context) {
   return SignInButton(
     Buttons.google,
     onPressed: () async {
+      auth.login();
     },
     elevation: 4,
   );

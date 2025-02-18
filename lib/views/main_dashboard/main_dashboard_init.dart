@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:profile_peneliti/providers/features/publication_provider.dart';
@@ -31,7 +32,10 @@ class _MainDashboardInitState extends State<MainDashboardInit> {
     super.initState();
     final scholarly = context.read<ScholarDetailProvider>();
     _askPermission();
-    WorkmanagerService.startPeriodicUpdate(scholarly.scholarDetail?.name ?? '');
+    if (!kIsWeb) {
+      WorkmanagerService.startPeriodicUpdate(
+          scholarly.scholarDetail?.name ?? '');
+    }
     // final publication =
     //     Provider.of<PublicationProvider>(context, listen: false);
     // WidgetsBinding.instance.addPostFrameCallback((_) {

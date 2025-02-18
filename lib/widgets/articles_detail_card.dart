@@ -27,25 +27,6 @@ class ArticlesDetailCard extends StatelessWidget {
       color: Colors.white,
       elevation: 4,
       child: ListTile(
-          title: Text(title ?? '',
-              style:
-                  isCompact! ? textTheme.titleMedium : textTheme.titleMedium),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                topSubtitle ?? '',
-                style: isCompact!
-                    ? textTheme.labelMedium
-                    : textTheme.labelMedium!,
-              ),
-              Text(
-                bottomSubtitle ?? '',
-                style:
-                    isCompact! ? textTheme.labelMedium : textTheme.labelMedium,
-              ),
-            ],
-          ),
           leading: Column(
             children: [
               Text(
@@ -60,6 +41,27 @@ class ArticlesDetailCard extends StatelessWidget {
               )
             ],
           ),
+          title: Text(title ?? '',
+              style:
+                  isCompact! ? textTheme.titleMedium : textTheme.titleMedium),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                topSubtitle ?? '',
+                style:
+                    isCompact! ? textTheme.labelMedium : textTheme.labelMedium!,
+              ),
+              Text(
+                bottomSubtitle ?? '',
+                style:
+                    isCompact! ? textTheme.labelMedium : textTheme.labelMedium,
+              ),
+            ],
+          ),
+          trailing: IconButton(
+            
+              iconSize: 30, onPressed: () {}, icon: Icon(Icons.info_rounded)),
           onTap: onTap ?? () {}),
     );
   }

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:profile_peneliti/extension/string_extension.dart';
@@ -34,12 +35,13 @@ class OverviewView extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () {
           // scholar.setSuccess();
-          return scholar
-              .fetchScholarProfile(scholar.scholarDetail?.scholarId ?? '');
+          return scholar.fetchScholarByName(
+              '${scholar.scholarDetail?.name} + ${scholar.scholarDetail?.emailDomain}' ??
+                  '');
         },
         color: Colors.blue,
         child: DynMouseScroll(
-            durationMS: 100,
+            durationMS: 300,
             builder: (context, controller, physics) {
               return ListView(
                 padding: EdgeInsets.zero,
@@ -176,8 +178,11 @@ class OverviewView extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.network(
-              src,
+            child: CachedNetworkImage(
+              imageUrl: src,
+              httpHeaders: {
+                'Access-Control-Allow-Origin': '*',
+              },
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
             ),

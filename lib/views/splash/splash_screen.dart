@@ -35,10 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
       final scholarProvider = context.read<ScholarDetailProvider>();
 
       await scholarProvider.loadData();
+      // await auth.logout();
 
       if (!mounted) return;
 
-      if (auth.user != null) {
+      if (scholarProvider.scholarDetail != null) {
         // Navigator.pushReplacementNamed(context, '/auth');
         Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
       } else {
