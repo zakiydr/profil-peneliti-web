@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:profile_peneliti/extension/email_parsing.dart';
+import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -26,32 +26,6 @@ class SearchView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(google.user?.email.splitDomain() ?? 'Email'),
-                        Text(google.user?.displayName ?? 'Display Name'),
-                        Text(google.user?.id ?? 'Id'),
-                        TextButton(
-                            onPressed: () {
-                              google.logout();
-                            },
-                            child: Text('Sign out'))
-                      ],
-                    );
-                  },
-                );
-              },
-              icon: Icon(Icons.person))
-        ],
-      ),
       body: SearchInit(
         child: SafeArea(
           child: Column(
@@ -77,16 +51,16 @@ class SearchView extends StatelessWidget {
                       case LoadingStates.initial:
                         return Container();
                       case LoadingStates.loading:
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       case LoadingStates.empty:
                         return Center(
-                            child: Container(child: Text('Not found')));
+                            child: Container(child: const Text('Not found')));
                       case LoadingStates.success:
                         return _buildSearchView(scholars, textTheme);
                       case LoadingStates.error:
                         return Center(
                           child: Container(
-                            child: Text('Failed retrieving data'),
+                            child: const Text('Failed retrieving data'),
                           ),
                         );
                     }
@@ -107,7 +81,7 @@ class SearchView extends StatelessWidget {
     double radius = 50;
 
     return ListView.separated(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
@@ -125,13 +99,13 @@ class SearchView extends StatelessWidget {
                 height: radius,
                 width: radius,
                 fit: BoxFit.cover,
-                imageUrl: scholars!.authors![index].urlPicture.toString(),
-                httpHeaders: {
+                imageUrl: scholars.authors![index].urlPicture.toString(),
+                httpHeaders: const {
                   "Access-Control-Allow-Headers":
                       "Access-Control-Allow-Origin, Accept"
                 },
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                placeholder: (context, url) => const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             title: Text(
@@ -149,17 +123,17 @@ class SearchView extends StatelessWidget {
               Navigator.of(context).pushNamed(AppRoutes.dashboard);
 
               scholarDetailProvider
-                  .fetchScholarProfile(scholars.authors![index].scholarId)
+                  .fetchScholarProfile(scholars.authors![index].scholarId ?? '')
                   .catchError((error) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Failed to load scholar details')));
                 }
               });
             },
           );
         },
-        separatorBuilder: (context, index) => SizedBox(
+        separatorBuilder: (context, index) => const SizedBox(
               height: 5,
             ),
         itemCount: scholars!.authors!.length);

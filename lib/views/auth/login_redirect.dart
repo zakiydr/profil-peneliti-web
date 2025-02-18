@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:profile_peneliti/constants/app_images.dart';
+import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -30,13 +31,21 @@ class _LoginRedirectState extends State<LoginRedirect> {
     final citation = context.read<CitationProvider>();
     final auth = context.read<GoogleAuthProvider>();
 
-    await scholarly.fetchScholarByName(scholarly.dummyName);
-    scholarly.saveData();
-    scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());
-    citation.saveCitation(scholarly.scholarDetail!.citedby);
+    final name = '${auth.user?.displayName} ${auth.user?.email.splitDomain()}';
 
-    if (scholarly.scholarDetail != null) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.dashboard);
+    try {
+      auth.login();
+      await scholarly.fetchScholarByName(scholarly.dummyName);
+      scholarly.saveData();
+      scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());
+      citation.saveCitation(scholarly.scholarDetail!.citedby);
+
+      if (scholarly.scholarDetail != null) {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.dashboard);
+      }
+    } catch (e) {
+      await auth.logout();
+      Navigator.of(context).pushReplacementNamed(AppRoutes.login);
     }
   }
 
@@ -47,12 +56,12 @@ class _LoginRedirectState extends State<LoginRedirect> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: const AssetImage(AppImages.appIcon),
+            const Image(
+              image: AssetImage(AppImages.appIcon),
               width: 100,
             ),
             LoadingAnimationWidget.waveDots(color: AppColors.blue, size: 50),
-            Text('Signing in...'),
+            const Text('Signing in...'),
           ],
         ),
       ),

@@ -31,7 +31,7 @@ class QuickStatsCard extends StatelessWidget {
               // colorFilter: ColorFilter.mode(color, BlendMode.colorDodge),
             ),
             Container(
-              decoration: BoxDecoration(),
+              decoration: const BoxDecoration(),
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

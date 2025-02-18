@@ -38,7 +38,7 @@ class SearchTextField extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 child: IconButton(
                   color: Colors.white,
-                  style: ButtonStyle(
+                  style: const ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.lightBlue),
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.horizontal(
@@ -55,7 +55,7 @@ class SearchTextField extends StatelessWidget {
                   ),
                 ),
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8))),
               contentPadding: _getContentPadding(deviceType),
             ),
@@ -101,11 +101,11 @@ class SearchTextField extends StatelessWidget {
   EdgeInsets _getContentPadding(DeviceType deviceType) {
     switch (deviceType) {
       case DeviceType.mobile:
-        return EdgeInsets.symmetric(vertical: 12, horizontal: 10);
+        return const EdgeInsets.symmetric(vertical: 12, horizontal: 10);
       case DeviceType.tablet:
-        return EdgeInsets.symmetric(vertical: 15, horizontal: 12);
+        return const EdgeInsets.symmetric(vertical: 15, horizontal: 12);
       case DeviceType.desktop:
-        return EdgeInsets.symmetric(vertical: 18, horizontal: 14);
+        return const EdgeInsets.symmetric(vertical: 18, horizontal: 14);
     }
   }
 }

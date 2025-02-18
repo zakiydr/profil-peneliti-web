@@ -5,7 +5,7 @@ part 'scholar_detail.g.dart';
 
 @JsonSerializable()
 class ScholarDetail extends Equatable {
-    ScholarDetail({
+    const ScholarDetail({
         required this.containerType,
         required this.filled,
         required this.source,
@@ -79,7 +79,7 @@ class ScholarDetail extends Equatable {
 
 @JsonSerializable()
 class Coauthor extends Equatable {
-    Coauthor({
+    const Coauthor({
         required this.containerType,
         required this.filled,
         required this.scholarId,
@@ -109,7 +109,7 @@ class Coauthor extends Equatable {
 
 @JsonSerializable()
 class PublicAccess extends Equatable {
-    PublicAccess({
+    const PublicAccess({
         required this.available,
         required this.notAvailable,
     });
@@ -130,7 +130,7 @@ class PublicAccess extends Equatable {
 
 @JsonSerializable()
 class Publication extends Equatable {
-    Publication({
+    const Publication({
         required this.containerType,
         required this.source,
         required this.bib,
@@ -170,7 +170,7 @@ class Publication extends Equatable {
 
 @JsonSerializable()
 class Bib extends Equatable {
-    Bib({
+    const Bib({
         required this.title,
         required this.pubYear,
         required this.citation,

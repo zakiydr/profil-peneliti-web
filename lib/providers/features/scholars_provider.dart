@@ -8,7 +8,7 @@ class ScholarsProvider extends AppProvider {
   final ScholarlyService service = ScholarlyService();
 
   Scholars? _scholars;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
 

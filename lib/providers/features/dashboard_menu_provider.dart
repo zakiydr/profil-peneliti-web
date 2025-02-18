@@ -12,8 +12,8 @@ class DashboardMenuProvider extends AppProvider {
 
   final _pages = [
     OverviewView(),
-    ArticlesView(),
-    SearchView(),
+    const ArticlesView(),
+    const SearchView(),
   ];
 
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;

@@ -34,7 +34,7 @@ class MostCitedArticles extends StatelessWidget {
             child: Column(
               children: [
                 MostCitedArticlesHeader(textTheme: textTheme),
-                Divider(),
+                const Divider(),
                 ListView.separated(
                   // padding: EdgeInsets.zero,
                   shrinkWrap: true,
@@ -71,13 +71,13 @@ class MostCitedArticlesHeader extends StatelessWidget {
           style: textTheme.titleMedium,
         ),
         TextButton(
-          child: Text('See All'),
           style: ButtonStyle(
             textStyle: WidgetStatePropertyAll(textTheme.titleMedium),
           ),
           onPressed: () { 
             menu.goToArticles(context);
           },
+          child: Text('See All'),
         ),
       ],
     );

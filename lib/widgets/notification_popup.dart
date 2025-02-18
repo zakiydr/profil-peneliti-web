@@ -23,7 +23,7 @@ class NotificationPopup extends StatelessWidget {
       color: Colors.white,
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       position: PopupMenuPosition.under,
-      icon: Icon(Icons.notifications_rounded),
+      icon: const Icon(Icons.notifications_rounded),
       itemBuilder: itemBuilder,
       onOpened: () async {
         final totalCitation = await citation.compareTotalCitation(

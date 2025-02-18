@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:profile_peneliti/constants/app_images.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/utils/responsive.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +10,8 @@ import '../../constants/app_routes.dart';
 import '../../providers/features/scholar_detail_provider.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -68,13 +72,9 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/logo-sttnf.png',
+              AppImages.appIcon,
               width: getResponsiveSize(100),
             ),
-            LoadingAnimationWidget.progressiveDots(
-              color: Colors.blue,
-              size: getResponsiveSize(50),
-            )
           ],
         ),
       ),

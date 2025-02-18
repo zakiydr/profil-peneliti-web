@@ -11,8 +11,8 @@ class ScholarlyService {
         'Content-Type': 'application/json',
         // 'Access-Control-Allow-Origin': _baseUrl
       },
-      receiveTimeout: Duration(seconds: 30),
-      connectTimeout: Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 10),
     ),
   );
 

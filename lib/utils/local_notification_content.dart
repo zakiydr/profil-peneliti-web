@@ -1,5 +1,4 @@
 
-import 'package:profile_peneliti/services/notification_service.dart';
 
 class LocalNotificationContent {
   // showNotification(int citation){

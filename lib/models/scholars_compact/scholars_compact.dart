@@ -5,7 +5,7 @@ part 'scholars_compact.g.dart';
 
 @JsonSerializable()
 class Scholars extends Equatable {
-    Scholars({
+    const Scholars({
         required this.authors,
     });
 
@@ -22,7 +22,7 @@ class Scholars extends Equatable {
 
 @JsonSerializable()
 class Author extends Equatable {
-    Author({
+    const Author({
         required this.containerType,
         required this.filled,
         required this.source,

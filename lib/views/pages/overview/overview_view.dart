@@ -1,26 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:math';
 
 import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:profile_peneliti/utils/url_launch.dart';
-import 'package:profile_peneliti/views/main_dashboard/main_dashboard_init.dart';
-import 'package:profile_peneliti/views/pages/overview/components/citation_chart.dart';
-import 'package:profile_peneliti/widgets/footer.dart';
+import 'package:profile_peneliti/extension/string_extension.dart';
+import 'package:profile_peneliti/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
-import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/utils/url_launch.dart';
+import 'package:profile_peneliti/views/pages/overview/components/citation_chart.dart';
+import 'package:profile_peneliti/widgets/footer.dart';
 
-import '../../../theme/app_theme.dart';
 import '../../../utils/responsive.dart';
-import '../../../widgets/dashboard_menu/dashboard_menu.dart';
-import '../../../widgets/header.dart';
+import 'components/dashboard_articles.dart';
 import 'components/quick_stats.dart';
 import 'components/quick_stats_card.dart';
-import 'components/dashboard_articles.dart';
 
 class OverviewView extends StatelessWidget {
   OverviewView({
@@ -29,7 +23,7 @@ class OverviewView extends StatelessWidget {
 
   final Map<int, int>? date = {};
 
-  final space = SizedBox(
+  final space = const SizedBox(
     height: 10,
   );
 
@@ -40,7 +34,8 @@ class OverviewView extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () {
           // scholar.setSuccess();
-          return scholar.fetchScholarProfile(scholar.scholarDetail?.scholarId);
+          return scholar
+              .fetchScholarProfile(scholar.scholarDetail?.scholarId ?? '');
         },
         color: Colors.blue,
         child: DynMouseScroll(
@@ -73,13 +68,16 @@ class OverviewView extends StatelessWidget {
                                 space,
                                 _buildChartCard(textTheme, scholar, context),
                                 space,
+                                if (scholar
+                                    .scholarDetail!.coauthors!.isNotEmpty)
+                                  _buildCoauthors(textTheme, scholar),
                                 if (ResponsiveConfig.getDeviceType(context) !=
                                     DeviceType.desktop)
                                   _buildMostCitedArticles(scholar, textTheme),
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           if (ResponsiveConfig.getDeviceType(context) ==
@@ -93,12 +91,63 @@ class OverviewView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Footer()
+                  const Footer()
                 ],
               );
             }),
       );
     });
+  }
+
+  Widget _buildCoauthors(TextTheme textTheme, ScholarDetailProvider scholar) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Co-Authors',
+              style: textTheme.titleMedium,
+            ),
+            const Divider(),
+            ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    // leading: CircleAvatar(foregroundImage: NetworkImage(scholar.scholarDetail.coauthors[index]),),
+                    title: Text(
+                      scholar.scholarDetail?.coauthors?[index].name
+                              .toString() ??
+                          '',
+                      style: textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      scholar.scholarDetail?.coauthors?[index].affiliation
+                              .toString() ??
+                          '',
+                      style: textTheme.bodyMedium,
+                    ),
+                    onTap: () async {
+                      final name =
+                          scholar.scholarDetail?.coauthors?[index].name;
+                      final affiliation =
+                          scholar.scholarDetail?.coauthors?[index].affiliation;
+                      final searchQuery = '$name $affiliation';
+
+                      await scholar.fetchScholarProfile(
+                          scholar.scholarDetail?.coauthors?[index].scholarId ??
+                              '');
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: scholar.scholarDetail!.coauthors!.length),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSideItems(TextTheme textTheme, BuildContext context,
@@ -118,17 +167,20 @@ class OverviewView extends StatelessWidget {
     );
   }
 
-  Card _buildUserProfile(ScholarDetailProvider scholar, TextTheme textTheme) {
+  Widget _buildUserProfile(ScholarDetailProvider scholar, TextTheme textTheme) {
     Widget imgLoader(src) {
       if (scholar.scholarDetail == null) {
-        return Icon(Icons.person);
+        return const Icon(Icons.person);
       }
       return ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            src,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Image.network(
+              src,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
           ));
     }
 
@@ -141,11 +193,22 @@ class OverviewView extends StatelessWidget {
               leading: imgLoader(scholar.scholarDetail?.urlPicture),
               title: Text(
                 scholar.scholarDetail?.name.toString() ?? '',
-                style: textTheme.titleSmall,
+                style: textTheme.titleMedium,
               ),
-              subtitle: Text(
-                  scholar.scholarDetail?.affiliation.toString() ?? '',
-                  style: textTheme.labelSmall),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(scholar.scholarDetail?.affiliation.toString() ?? '',
+                      style: textTheme.labelSmall),
+                  Text(
+                      scholar.scholarDetail?.interests
+                              ?.join(" | ")
+                              .toSentenceCase() ??
+                          '',
+                      style: textTheme.labelSmall
+                          ?.copyWith(color: AppColors.deepBlue)),
+                ],
+              ),
             ),
           ),
           // Container(
@@ -192,9 +255,9 @@ class OverviewView extends StatelessWidget {
 
   Widget _buildChartCard(TextTheme textTheme, ScholarDetailProvider scholar,
       BuildContext context) {
-    return Card(
+    return const Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

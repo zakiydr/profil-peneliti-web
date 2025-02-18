@@ -8,7 +8,7 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme;
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       tileColor: AppColors.lightGrey,
       title:
           Text('2025 \u00a9 STT Terpadu Nurul Fikri', style: style.titleSmall),

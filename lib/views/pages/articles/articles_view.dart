@@ -35,13 +35,13 @@ class ArticlesView extends StatelessWidget {
                 Consumer<ScholarDetailProvider>(
                     builder: (context, scholar, child) {
                   if (scholar.scholarDetail == null) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                   return ListView.separated(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: scholarDetail!.publications!.length,
                     itemBuilder: (context, index) {
                       return Column(
@@ -86,6 +86,6 @@ class ArticlesView extends StatelessWidget {
   }
 
   Widget _getSpace() {
-    return SizedBox(height: 3);
+    return const SizedBox(height: 3);
   }
 }

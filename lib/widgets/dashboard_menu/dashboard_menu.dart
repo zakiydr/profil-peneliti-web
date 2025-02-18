@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:profile_peneliti/extension/email_parsing.dart';
+import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
@@ -45,7 +45,7 @@ class DashboardMenu extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image(
-                          image: AssetImage(AppImages.appIcon),
+                          image: const AssetImage(AppImages.appIcon),
                           width: 60,
                           errorBuilder: (context, error, stackTrace) {
                             print('Error loading image: $error');
@@ -61,23 +61,29 @@ class DashboardMenu extends StatelessWidget {
                     ),
                   ),
                   DashboardTiles(
-                    leading: const Icon(Icons.dashboard),
+                    leading: const Icon(
+                      Icons.dashboard,
+                      size: 25,
+                    ),
                     title: 'Overview',
                     selected: menu.selectedIndex == 0,
                     onTap: () => menu.goToOverview(context),
                   ),
                   DashboardTiles(
-                    leading: Icon(Icons.article_rounded),
+                    leading: Image.asset(
+                      AppImages.gsIcon,
+                      width: 25,
+                    ),
                     title: 'Google Scholar',
                     selected: menu.selectedIndex == 1,
                     onTap: () => menu.goToArticles(context),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                          '${auth.user!.displayName} ${auth.user!.email.splitDomain()}')
-                    ],
-                  )
+                  // Column(
+                  //   children: [
+                  //     Text(
+                  //         '${auth.user!.displayName} ${auth.user!.email.splitDomain()}')
+                  //   ],
+                  // )
                   // DashboardTiles(
                   //   title: 'Citation',
                   //   selected: menu.selectedIndex == 2,
@@ -88,7 +94,7 @@ class DashboardMenu extends StatelessWidget {
             ),
           ),
           Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),

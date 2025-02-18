@@ -2,7 +2,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:profile_peneliti/extension/email_parsing.dart';
+import 'package:profile_peneliti/constants/app_images.dart';
+import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -12,8 +13,8 @@ import 'package:provider/provider.dart';
 
 import '../../constants/app_routes.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +25,7 @@ class SignInScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     if (user != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        //     // auth.logout();
-        //     // final name = '${user.displayName} ${user.email.splitDomain()}';
-
-        //     // await scholarly.fetchScholarByName(name);
-        //     // scholarly.saveData();
-        //     // scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());
-        //     // citation.saveCitation(scholarly.scholarDetail!.citedby);
-
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacementNamed(AppRoutes.loginRedirect);
       });
     }
@@ -43,9 +36,9 @@ class SignInScreen extends StatelessWidget {
         children: [
           if (ResponsiveConfig.getDeviceType(context) == DeviceType.desktop)
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: ExactAssetImage('assets/images/background.jpg'),
+                      image: ExactAssetImage(AppImages.webBackground),
                       fit: BoxFit.cover)),
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
@@ -60,7 +53,7 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           Center(
-            child: Container(
+            child: SizedBox(
               width: 700,
               child: Card(
                 color: Colors.white,
@@ -75,13 +68,13 @@ class SignInScreen extends StatelessWidget {
                         'Welcome!',
                         style: textTheme.headlineSmall,
                       ),
-                      Image(
+                      const Image(
                         width: 100,
                         image: AssetImage(
                           'assets/images/icon_app.png',
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       buildSignInButton(context),

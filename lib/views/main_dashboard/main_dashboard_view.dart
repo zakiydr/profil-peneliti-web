@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/constants/app_routes.dart';
 import 'package:profile_peneliti/providers/app_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/features/dashboard_menu_provider.dart';
 import '../../providers/features/scholar_detail_provider.dart';
@@ -14,28 +16,59 @@ class MainDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scholar = context.read<ScholarDetailProvider>();
     return Scaffold(
-      drawer: DashboardMenu(),
+      drawer: const DashboardMenu(),
+      floatingActionButton: _buildFloatingButton(context, scholar),
       body: Consumer<ScholarDetailProvider>(
         builder: (context, scholar, child) {
           switch (scholar.state) {
             case LoadingStates.initial:
               return Container();
             case LoadingStates.loading:
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             case LoadingStates.success:
               return _buildBody(context);
             case LoadingStates.error:
               return Center(
-                child: Text('Unexpected error'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Unexpected error'),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.dashboard);
+                        },
+                        child: const Text('Back'))
+                  ],
+                ),
               );
             default:
               return Container();
           }
         },
       ),
+    );
+  }
+
+  Widget _buildFloatingButton(
+      BuildContext context, ScholarDetailProvider scholar) {
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            scholar.scholarDetail?.scholarId !=
+                snapshot.data?.getString('scholar_id')) {
+          return FloatingActionButton(
+            child: const Icon(Icons.home),
+            onPressed: () {},
+          );
+        }
+        return Container();
+      },
     );
   }
 
@@ -49,16 +82,16 @@ class MainDashboardView extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Material(
-                child: DashboardMenu(),
                 elevation: 0,
                 borderRadius: BorderRadius.circular(16),
+                child: DashboardMenu(),
               ),
             ),
           Expanded(
             flex: 4,
             child: Column(
               children: [
-                AppHeader(),
+                const AppHeader(),
                 Expanded(
                   child: menu.pages[menu.selectedIndex],
                 ),
