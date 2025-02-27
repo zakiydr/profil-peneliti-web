@@ -1,6 +1,9 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:profile_peneliti/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,51 +26,135 @@ class ArticlesView extends StatelessWidget {
 
     return Scaffold(
       body: DynMouseScroll(
-          durationMS: 100,
-          builder: (context, controller, physics) {
-            return ListView(
-              controller: controller,
-              physics: physics,
-              padding: ResponsiveConfig.getPadding(context),
-              children: [
-                _buildArticleHeader(context),
-                _getSpace(),
-                Consumer<ScholarDetailProvider>(
-                    builder: (context, scholar, child) {
-                  if (scholar.scholarDetail == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: scholarDetail!.publications!.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ArticlesDetailCard(
-                            title:
-                                scholarDetail.publications?[index].bib?.title,
-                            topSubtitle: scholarDetail
-                                .publications?[index].bib?.citation,
-                            // bottomSubtitle: scholarDetail.publications?[index].bib?.pubYear,
-                            leadingCitation: scholarDetail
-                                .publications?[index].numCitations
-                                .toString(),
-                            onTap: () => UrlLaunch().redirectUrl(scholarDetail
-                                .publications![index].citedbyUrl
-                                .toString()),
+        durationMS: 100,
+        builder: (context, controller, physics) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: ResponsiveConfig.getPadding(context),
+                child: _buildArticleHeader(context),
+              ),
+              _getSpace(),
+              Expanded(
+                child: Consumer<ScholarDetailProvider>(
+                  builder: (context, scholar, child) {
+                    if (scholar.scholarDetail == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Padding(
+                      padding: ResponsiveConfig.getPadding(context),
+                      child: DataTable2(
+                        dataRowHeight: 90,
+                        columnSpacing: 12,
+                        horizontalMargin: 12,
+                        minWidth: 600,
+                        scrollController: controller,
+                        columns: [
+                          DataColumn2(
+                            label: Text(
+                              'Citations',
+                              style: textTheme.titleSmall,
+                            ),
+                            size: ColumnSize.S,
+                            fixedWidth: 70,
+                            numeric: true,
+                          ),
+                          DataColumn2(
+                            label: Text(
+                              'Title',
+                              style: textTheme.titleSmall,
+                            ),
+                            size: ColumnSize.L,
+                          ),
+                          DataColumn2(
+                            label: Text(
+                              'Detail',
+                              style: textTheme.titleSmall,
+                            ),
+                            size: ColumnSize.S,
+                            fixedWidth: 70,
                           ),
                         ],
-                      );
-                    },
-                    separatorBuilder: (_, __) => _getSpace(),
-                  );
-                }),
-              ],
-            );
-          }),
+                        rows: List<DataRow>.generate(
+                          scholar.scholarDetail!.publications!.length,
+                          (index) => DataRow(
+                            cells: [
+                              DataCell(
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    scholar.scholarDetail!.publications![index]
+                                            .numCitations
+                                            .toString() ??
+                                        '0',
+                                    style: textTheme.titleSmall,
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      scholar
+                                              .scholarDetail!
+                                              .publications![index]
+                                              .bib
+                                              ?.title ??
+                                          '',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                      style: textTheme.titleSmall,
+                                    ),
+                                    // const SizedBox(height: 4),
+                                    Text(
+                                      'Published: ${scholar.scholarDetail!.publications![index].bib?.pubYear}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: textTheme.labelSmall,
+                                    ),
+                                  ],
+                                ),
+                                // Uncomment and modify onTap as needed:
+                                // onTap: () => UrlLaunch().redirectUrl(
+                                //   scholar.scholarDetail!.publications![index]
+                                //       .citedbyUrl
+                                //       .toString(),
+                                // ),
+                              ),
+                              DataCell(
+                                IconButton(
+                                  onPressed: () {
+                                    UrlLaunch().redirectUrl(
+                                      scholar.scholarDetail!
+                                          .publications![index].citedbyUrl
+                                          .toString(),
+                                    );
+                                  },
+                                  icon: AppFaIcon(
+                                    FontAwesomeIcons.upRightFromSquare,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

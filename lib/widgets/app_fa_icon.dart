@@ -27,7 +27,7 @@ class AppFaIcon extends StatelessWidget {
       key: key,
       semanticLabel: semanticLabel,
       shadows: shadow,
-      size: 24,
+      size: size ?? 24,
       textDirection: textDirection,
     );
   }

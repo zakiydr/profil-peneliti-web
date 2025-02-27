@@ -26,11 +26,11 @@ import 'views/splash/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  NotificationService.initNotification;
+  await NotificationService().initNotification;
 
-  if (!kIsWeb) {
-    await WorkmanagerService.initialize();
-  }
+  // if (!kIsWeb) {
+  //   await WorkmanagerService.initialize();
+  // }
 
   runApp(const MyApp());
 }

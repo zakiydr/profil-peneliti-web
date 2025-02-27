@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/views/search/search_init.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_routes.dart';
@@ -54,7 +56,8 @@ class SearchView extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       case LoadingStates.empty:
                         return Center(
-                            child: Container(child: const Text('Not found')));
+                            child: Container(
+                                child: const Text('Profile not found')));
                       case LoadingStates.success:
                         return _buildSearchView(scholars, textTheme);
                       case LoadingStates.error:
@@ -104,8 +107,10 @@ class SearchView extends StatelessWidget {
                   "Access-Control-Allow-Headers":
                       "Access-Control-Allow-Origin, Accept"
                 },
-                placeholder: (context, url) => const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    const AppFaIcon(FontAwesomeIcons.circleExclamation),
               ),
             ),
             title: Text(
