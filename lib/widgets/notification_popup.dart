@@ -16,7 +16,7 @@ class NotificationPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final citation = context.read<CitationProvider>();
     final scholar = context.read<ScholarDetailProvider>();
-    return PopupMenuButton(
+    return PopupMenuButton( 
       tooltip: '',
       shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(16)),
       menuPadding: EdgeInsets.zero,

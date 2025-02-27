@@ -6,30 +6,25 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  static Future initNotification() async {
+  Future<void> initNotification() async {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
 
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings("@mipmap/sttnf_icon");
-    final DarwinInitializationSettings initializationSettingsDarwin =
-        const DarwinInitializationSettings();
-    final LinuxInitializationSettings initializationSettingsLinux =
-        const LinuxInitializationSettings(defaultActionName: 'Open notification');
-    final InitializationSettings initializationSettings =
+        AndroidInitializationSettings("@mipmap/icon_app");
+    const DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings();
+    const InitializationSettings initializationSettings =
         InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsDarwin,
-            macOS: initializationSettingsDarwin,
-            linux: initializationSettingsLinux);
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+      macOS: initializationSettingsDarwin,
+    );
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        return;
-      },
+      
     );
   }
 
@@ -47,12 +42,16 @@ class NotificationService {
         importance: Importance.max,
         priority: Priority.high,
         showWhen: true,
-        icon: '@mipmap/sttnf_icon',
+        icon: '@mipmap/icon_app',
         ticker: 'ticker',
         channelShowBadge: true,
         color: Colors.blue,
         colorized: true,
       );
+
+      const DarwinNotificationDetails iosNotificationDetails =
+          DarwinNotificationDetails();
+
       const NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
       );
