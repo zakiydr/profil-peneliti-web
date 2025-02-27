@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/constants/app_routes.dart';
 import 'package:profile_peneliti/providers/app_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,7 +68,7 @@ class MainDashboardView extends StatelessWidget {
             scholar.scholarDetail?.scholarId !=
                 snapshot.data?.getString('scholar_id')) {
           return FloatingActionButton(
-            child: const Icon(Icons.home),
+            child: const AppFaIcon(FontAwesomeIcons.house),
             onPressed: () {},
           );
         }

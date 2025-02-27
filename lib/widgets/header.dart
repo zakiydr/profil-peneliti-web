@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/constants/app_routes.dart';
 import 'package:profile_peneliti/models/scholar_detail/scholar_detail.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
@@ -8,6 +9,7 @@ import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
 import 'package:profile_peneliti/utils/url_launch.dart';
 import 'package:profile_peneliti/widgets/articles_detail_card.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:profile_peneliti/widgets/notification_popup.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +45,9 @@ class AppHeader extends StatelessWidget {
                           .read<DashboardMenuProvider>()
                           .controlMenu(context);
                     },
-                    icon: Icon(Icons.menu),
+                    icon: AppFaIcon(
+                      FontAwesomeIcons.bars,
+                    ),
                   ),
                 _buildSearchButton(context, textTheme),
               ],
@@ -181,7 +185,7 @@ class AppHeader extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: AppFaIcon(FontAwesomeIcons.magnifyingGlass),
         hintText: 'Search Scholar...');
   }
 
@@ -207,6 +211,8 @@ class AppHeader extends StatelessWidget {
           context.read<ScholarsProvider>().prepareForSearch();
           Navigator.pushNamed(context, AppRoutes.search);
         },
-        icon: Icon(Icons.search_rounded));
+        icon: AppFaIcon(
+          FontAwesomeIcons.magnifyingGlass,
+        ));
   }
 }

@@ -3,8 +3,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/theme/app_colors.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:provider/provider.dart';
 
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
@@ -172,7 +174,7 @@ class OverviewView extends StatelessWidget {
   Widget _buildUserProfile(ScholarDetailProvider scholar, TextTheme textTheme) {
     Widget imgLoader(src) {
       if (scholar.scholarDetail == null) {
-        return const Icon(Icons.person);
+        return const AppFaIcon(FontAwesomeIcons.user);
       }
       return ClipRRect(
           borderRadius: BorderRadius.circular(8),

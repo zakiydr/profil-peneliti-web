@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
@@ -6,6 +7,7 @@ import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/utils/responsive.dart';
 import 'package:profile_peneliti/views/pages/overview/overview_view.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_images.dart';
@@ -61,25 +63,20 @@ class DashboardMenu extends StatelessWidget {
                     ),
                   ),
                   DashboardTiles(
-                    leading: const Icon(
-                      Icons.dashboard,
-                      size: 25,
-                    ),
+                    leading:
+                        const AppFaIcon(FontAwesomeIcons.squarePollVertical),
                     title: 'Overview',
                     selected: menu.selectedIndex == 0,
                     onTap: () => menu.goToOverview(context),
                   ),
                   DashboardTiles(
-                    leading: Image.asset(
-                      AppImages.gsIcon,
-                      width: 25,
-                    ),
+                    leading: AppFaIcon(FontAwesomeIcons.googleScholar),
                     title: 'Google Scholar',
                     selected: menu.selectedIndex == 1,
                     onTap: () => menu.goToArticles(context),
                   ),
                   DashboardTiles(
-                    leading: Icon(Icons.info_outline_rounded),
+                    leading: AppFaIcon(FontAwesomeIcons.info),
                     title: 'About',
                     selected: menu.selectedIndex == 2,
                     onTap: () => menu.goToAbout(context),

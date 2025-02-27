@@ -15,9 +15,15 @@ class DashboardTiles extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: leading,
+      leading: SizedBox(
+        width: 24, // Adjust this width as needed
+        child: Center(
+          child: leading!,
+        ),
+      ),
       selected: selected,
       title: Text(title ?? ''),
       onTap: onTap,
