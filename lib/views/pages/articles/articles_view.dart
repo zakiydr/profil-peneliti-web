@@ -3,6 +3,7 @@ import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/theme/app_colors.dart';
 import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:profile_peneliti/widgets/header.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class ArticlesView extends StatelessWidget {
                     return Padding(
                       padding: ResponsiveConfig.getPadding(context),
                       child: DataTable2(
+                        headingRowColor: WidgetStatePropertyAll(AppColors.grey),
                         dataRowHeight: 90,
                         columnSpacing: 12,
                         horizontalMargin: 12,
@@ -71,7 +73,7 @@ class ArticlesView extends StatelessWidget {
                           ),
                           DataColumn2(
                             label: Text(
-                              'Detail',
+                              '',
                               style: textTheme.titleSmall,
                             ),
                             size: ColumnSize.S,

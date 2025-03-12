@@ -119,30 +119,39 @@ class OverviewView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
+                  final coauthor = scholar.scholarDetail?.coauthors?[index];
                   return ListTile(
-                    // leading: CircleAvatar(foregroundImage: NetworkImage(scholar.scholarDetail.coauthors[index]),),
                     title: Text(
-                      scholar.scholarDetail?.coauthors?[index].name
-                              .toString() ??
-                          '',
+                      coauthor?.name.toString() ?? '',
                       style: textTheme.titleMedium,
                     ),
                     subtitle: Text(
-                      scholar.scholarDetail?.coauthors?[index].affiliation
-                              .toString() ??
-                          '',
+                      coauthor?.affiliation.toString() ?? '',
                       style: textTheme.bodyMedium,
                     ),
                     onTap: () async {
-                      final name =
-                          scholar.scholarDetail?.coauthors?[index].name;
-                      final affiliation =
-                          scholar.scholarDetail?.coauthors?[index].affiliation;
-                      final searchQuery = '$name $affiliation';
+                      if (coauthor == null) return;
 
-                      await scholar.fetchScholarProfile(
-                          scholar.scholarDetail?.coauthors?[index].scholarId ??
-                              '');
+                      try {
+                        // First attempt: Try to fetch by name and affiliation
+                        final searchQuery =
+                            '${coauthor.name} ${coauthor.affiliation}';
+                        await scholar.fetchScholarByName(searchQuery);
+                      } catch (e) {
+                        if (coauthor.scholarId != null) {
+                          try {
+                            await scholar
+                                .fetchScholarProfile(coauthor.scholarId!);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Failed to fetch scholar details'),
+                              ),
+                            );
+                          }
+                        }
+                      }
                     },
                   );
                 },
@@ -268,7 +277,7 @@ class OverviewView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CitationChart(),
+            CitationChartCard(),
           ],
         ),
       ),

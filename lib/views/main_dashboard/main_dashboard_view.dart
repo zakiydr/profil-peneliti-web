@@ -36,25 +36,34 @@ class MainDashboardView extends StatelessWidget {
             case LoadingStates.success:
               return _buildBody(context);
             case LoadingStates.error:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Unexpected error'),
-                    ElevatedButton(
-                        onPressed: () async {
-                          await auth.logout();
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.login);
-                        },
-                        child: const Text('Back'))
-                  ],
-                ),
-              );
+              return _buildError();
             default:
               return Container();
           }
         },
+      ),
+    );
+  }
+
+  Center _buildError() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Unexpected error'),
+          // ElevatedButton(
+          //     onPressed: () async {
+          //       if (scholar.scholarDetail != null) {
+          //         Navigator.pushReplacementNamed(
+          //             context, AppRoutes.dashboard);
+          //       } else {
+          //         await auth.logout();
+          //         Navigator.pushReplacementNamed(
+          //             context, AppRoutes.login);
+          //       }
+          //     },
+          //     child: const Text('Back'))
+        ],
       ),
     );
   }

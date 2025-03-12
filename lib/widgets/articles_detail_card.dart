@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 
 class ArticlesDetailCard extends StatelessWidget {
   final String? title;
@@ -7,6 +9,7 @@ class ArticlesDetailCard extends StatelessWidget {
   final String? bottomSubtitle;
   final String? leadingCitation;
   final bool? isCompact;
+  final List<Widget>? detail;
   final VoidCallback? onTap;
 
   const ArticlesDetailCard({
@@ -17,6 +20,7 @@ class ArticlesDetailCard extends StatelessWidget {
     this.leadingCitation,
     this.isCompact = false,
     this.onTap,
+    this.detail,
   }) : super(key: key);
 
   @override
@@ -60,8 +64,26 @@ class ArticlesDetailCard extends StatelessWidget {
             ],
           ),
           trailing: IconButton(
-            
-              iconSize: 30, onPressed: () {}, icon: Icon(Icons.info_rounded)),
+            icon: AppFaIcon(FontAwesomeIcons.upRightFromSquare),
+            onPressed: () {
+              showAdaptiveDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog.adaptive(
+                    content: Column(children: detail ?? []),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
           onTap: onTap ?? () {}),
     );
   }

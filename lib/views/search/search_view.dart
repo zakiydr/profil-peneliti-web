@@ -28,6 +28,9 @@ class SearchView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Search '),
+      ),
       body: SearchInit(
         child: SafeArea(
           child: Column(

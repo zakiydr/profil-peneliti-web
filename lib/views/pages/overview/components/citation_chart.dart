@@ -2,19 +2,25 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:profile_peneliti/models/scholar_detail/scholar_detail.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/views/pages/overview/components/citation_bar_chart.dart';
+import 'package:profile_peneliti/widgets/app_fa_icon.dart';
 import 'package:provider/provider.dart';
 
-class CitationChart extends StatefulWidget {
-  const CitationChart({Key? key}) : super(key: key);
+class CitationChartCard extends StatefulWidget {
+  const CitationChartCard({Key? key}) : super(key: key);
 
   @override
-  State<CitationChart> createState() => _CitationChartState();
+  State<CitationChartCard> createState() => _CitationChartCardState();
 }
 
-class _CitationChartState extends State<CitationChart> {
+class _CitationChartCardState extends State<CitationChartCard> {
   bool isOnlyFiveYears = false;
+
+  ScrollController _horizontalScroll = ScrollController();
+  ScrollController _verticalScroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,113 +82,10 @@ class _CitationChartState extends State<CitationChart> {
       children: [
         _buildCitationInfo(textTheme, scholarDetail),
         const SizedBox(height: 30),
-        SizedBox(
-          height: 300,
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              maxY: maxY,
-              barTouchData: BarTouchData(
-                enabled: true,
-                touchTooltipData: BarTouchTooltipData(
-                  tooltipMargin: 0,
-                  tooltipPadding: EdgeInsets.zero,
-                  fitInsideHorizontally: true,
-                  fitInsideVertically: false,
-                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    return BarTooltipItem(
-                      rod.toY.round().toString(),
-                      const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 5,
-                            color: Colors.white,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  getTooltipColor: (group) => Colors.transparent,
-                ),
-              ),
-              titlesData: FlTitlesData(
-                show: true,
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      int index = value.toInt();
-                      if (index >= 0 && index < displayedCitesList.length) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            '${displayedCitesList[index].key}',
-                            style: textTheme.bodySmall,
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      // Only show labels at grid intervals
-                      if (value % interval == 0) {
-                        return Text(
-                          value.toInt().toString(),
-                          style: textTheme.bodySmall,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                    reservedSize: 40,
-                    interval: interval, // Set the interval for labels
-                  ),
-                ),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                leftTitles: const AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-              ),
-              gridData: FlGridData(
-                drawVerticalLine: false,
-                getDrawingHorizontalLine: (value) {
-                  // Only draw grid lines at intervals
-                  if (value % interval == 0) {
-                    return FlLine(
-                      dashArray: [5, 5],
-                      color: Colors.grey.withOpacity(0.3),
-                      strokeWidth: 1,
-                    );
-                  }
-                  return const FlLine(
-                    color: Colors.transparent,
-                    strokeWidth: 0,
-                  );
-                },
-                show: true,
-                horizontalInterval: interval,
-              ),
-              borderData: FlBorderData(
-                show: true,
-                border: const Border(
-                  bottom: BorderSide(width: 1, color: Colors.grey),
-                  left: BorderSide.none,
-                  right: BorderSide.none,
-                  top: BorderSide.none,
-                ),
-              ),
-              barGroups: barGroups,
-            ),
-          ),
+        CitationBarChart(
+          citesList: displayedCitesList,
+          yAxisConfig: yAxisConfig,
+          textTheme: textTheme,
         ),
         const SizedBox(height: 16),
         SwitchListTile(
@@ -199,28 +102,120 @@ class _CitationChartState extends State<CitationChart> {
   }
 
   Widget _buildCitationInfo(TextTheme textTheme, ScholarDetail scholarDetail) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Cited by',
-              style: textTheme.headlineSmall,
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Cited by',
+                style: textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                isOnlyFiveYears
+                    ? scholarDetail.citedby5Y.toString()
+                    : scholarDetail.citedby.toString(),
+                style: textTheme.displaySmall,
+              ),
+              Text(
+                'Articles',
+                style: textTheme.bodyLarge,
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          isOnlyFiveYears
-              ? scholarDetail.citedby5Y.toString()
-              : scholarDetail.citedby.toString(),
-          style: textTheme.displaySmall,
-        ),
-        Text(
-          'Articles',
-          style: textTheme.bodyLarge,
+        IconButton(
+          icon: AppFaIcon(FontAwesomeIcons.upRightAndDownLeftFromCenter),
+          onPressed: () {
+            final List<int> citesYearKeys = scholarDetail.citesPerYear!.keys
+                .map(int.parse)
+                .toList()
+              ..sort();
+
+            final List<double> citesYearValues = scholarDetail
+                .citesPerYear!.values
+                .map((e) => e.toDouble())
+                .toList();
+
+            final List<MapEntry<int, double>> fullCitesList = List.generate(
+              citesYearKeys.length,
+              (index) => MapEntry(citesYearKeys[index], citesYearValues[index]),
+            )..sort((a, b) => a.key.compareTo(b.key));
+
+            final yAxisConfig = calculateYAxisConfig(
+              fullCitesList.map((e) => e.value).reduce(max),
+            );
+
+// In _buildCitationInfo(), replace the showDialog part with:
+
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      maxHeight: MediaQuery.of(context).size.height * 0.6,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const AppFaIcon(FontAwesomeIcons.xmark),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Scrollbar(
+                            trackVisibility: true,
+                            thumbVisibility: true,
+                            controller: _verticalScroll,
+                            child: SingleChildScrollView(
+                              controller: _verticalScroll,
+                              child: Scrollbar(
+                                trackVisibility: true,
+                                thumbVisibility: true,
+                                controller: _horizontalScroll,
+                                child: SingleChildScrollView(
+                                  controller: _horizontalScroll,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: CitationBarChart(
+                                      citesList: fullCitesList,
+                                      yAxisConfig: yAxisConfig,
+                                      textTheme: textTheme,
+                                      width: max(
+                                        MediaQuery.of(context).size.width * 0.8,
+                                        fullCitesList.length * 40.0,
+                                      ),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.6,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ],
     );
