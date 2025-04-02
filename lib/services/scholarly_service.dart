@@ -3,7 +3,8 @@ import 'package:profile_peneliti/models/scholar_detail/scholar_detail.dart';
 import 'package:profile_peneliti/models/scholars/scholars.dart';
 
 class ScholarlyService {
-  static const _baseUrl = 'https://zakiydr.pythonanywhere.com/';
+  static const _baseUrl = 'https://scholar-profile.vercel.app/';
+  // static const _baseUrl = 'http://127.0.0.1:8000/';
   final dio = Dio(
     BaseOptions(
       baseUrl: _baseUrl,
@@ -11,8 +12,8 @@ class ScholarlyService {
         'Content-Type': 'application/json',
         // 'Access-Control-Allow-Origin': _baseUrl
       },
-      receiveTimeout: const Duration(seconds: 10),
-      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 20),
     ),
   );
 
@@ -50,7 +51,7 @@ class ScholarlyService {
       "author": author,
     };
     try {
-      final Response response = 
+      final Response response =
           await dio.get('goscholar/author/name/', queryParameters: queryParams);
       final ScholarDetail data = ScholarDetail.fromJson(response.data);
       if (response.statusCode == 200) {
