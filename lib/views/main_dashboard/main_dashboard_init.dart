@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:profile_peneliti/providers/features/publication_provider.dart';
+import 'package:profile_peneliti/providers/features/pub_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/services/workmanager_service.dart';
 import 'package:profile_peneliti/views/main_dashboard/main_dashboard_view.dart';
@@ -37,7 +37,7 @@ class _MainDashboardInitState extends State<MainDashboardInit> {
     //       scholarly.scholarDetail?.name ?? '');
     // }
     // final publication =
-    //     Provider.of<PublicationProvider>(context, listen: false);
+    //     Provider.of<PubDetailProvider>(context, listen: false);
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   publication.setScholarDetail(_scholarProvider.scholarDetail);
 

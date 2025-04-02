@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:profile_peneliti/providers/features/pub_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/theme/app_colors.dart';
 import 'package:profile_peneliti/widgets/app_fa_icon.dart';
@@ -24,6 +25,7 @@ class ArticlesView extends StatelessWidget {
         Provider.of<ScholarDetailProvider>(context, listen: false)
             .scholarDetail;
     final textTheme = Theme.of(context).textTheme;
+    final pubProvider = context.read<PubDetailProvider>();
 
     return Scaffold(
       body: DynMouseScroll(
@@ -98,38 +100,52 @@ class ArticlesView extends StatelessWidget {
                                 ),
                               ),
                               DataCell(
-                                Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(
-                                      scholar
-                                              .scholarDetail!
-                                              .publications![index]
-                                              .bib
-                                              ?.title ??
-                                          '',
-                                      maxLines: 5,
-                                      style: textTheme.titleSmall,
-                                    ),
-                                    // const SizedBox(height: 4),
-                                    Text(
-                                      'Published: ${scholar.scholarDetail!.publications![index].bib?.pubYear}',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: textTheme.labelSmall,
-                                    ),
-                                  ],
-                                ),
-                                // Uncomment and modify onTap as needed:
-                                // onTap: () => UrlLaunch().redirectUrl(
-                                //   scholar.scholarDetail!.publications![index]
-                                //       .citedbyUrl
-                                //       .toString(),
-                                // ),
-                              ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        scholar
+                                                .scholarDetail!
+                                                .publications![index]
+                                                .bib
+                                                ?.title ??
+                                            '',
+                                        maxLines: 5,
+                                        style: textTheme.titleSmall,
+                                      ),
+
+                                      // const SizedBox(height: 4),
+                                      Text(
+                                        'Published: ${scholar.scholarDetail!.publications![index].bib?.pubYear}',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: textTheme.labelSmall,
+                                      ),
+                                    ],
+                                  ), onTap: () async {
+                                await pubProvider.fetchPubDetail(scholar
+                                    .scholarDetail!
+                                    .publications![index]
+                                    .bib!
+                                    .title!);
+                                showAdaptiveDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog.adaptive(
+                                      content: Column(
+                                        children: [
+                                          Text(pubProvider
+                                                  .publication?.bib?.title ??
+                                              '')
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
                               DataCell(
                                 IconButton(
                                   onPressed: () {

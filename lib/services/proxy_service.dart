@@ -20,8 +20,8 @@ class ProxyService {
     dio = Dio(
       BaseOptions(
         baseUrl: _url,
-        receiveTimeout: const Duration(seconds: 20),
-        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 30),
+        // connectTimeout: const Duration(seconds: 20),
         // Add some headers if needed
         headers: {
           'Accept': 'application/json',

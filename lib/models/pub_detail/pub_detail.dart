@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'publication.g.dart';
+part 'pub_detail.g.dart';
 
 @JsonSerializable()
-class Publication extends Equatable {
-    Publication({
+class PubDetail extends Equatable {
+    PubDetail({
         required this.containerType,
         required this.source,
         required this.bib,
@@ -52,7 +52,7 @@ class Publication extends Equatable {
     @JsonKey(name: 'eprint_url') 
     final String? eprintUrl;
 
-    Publication copyWith({
+    PubDetail copyWith({
         String? containerType,
         String? source,
         Bib? bib,
@@ -67,7 +67,7 @@ class Publication extends Equatable {
         String? urlRelatedArticles,
         String? eprintUrl,
     }) {
-        return Publication(
+        return PubDetail(
             containerType: containerType ?? this.containerType,
             source: source ?? this.source,
             bib: bib ?? this.bib,
@@ -84,9 +84,9 @@ class Publication extends Equatable {
         );
     }
 
-    factory Publication.fromJson(Map<String, dynamic> json) => _$PublicationFromJson(json);
+    factory PubDetail.fromJson(Map<String, dynamic> json) => _$PubDetailFromJson(json);
 
-    Map<String, dynamic> toJson() => _$PublicationToJson(this);
+    Map<String, dynamic> toJson() => _$PubDetailToJson(this);
 
     @override
     List<Object?> get props => [

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'publication.dart';
+part of 'pub_detail.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Publication _$PublicationFromJson(Map<String, dynamic> json) => Publication(
+PubDetail _$PubDetailFromJson(Map<String, dynamic> json) => PubDetail(
       containerType: json['container_type'] as String?,
       source: json['source'] as String?,
       bib: json['bib'] == null
@@ -26,8 +26,7 @@ Publication _$PublicationFromJson(Map<String, dynamic> json) => Publication(
       eprintUrl: json['eprint_url'] as String?,
     );
 
-Map<String, dynamic> _$PublicationToJson(Publication instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PubDetailToJson(PubDetail instance) => <String, dynamic>{
       'container_type': instance.containerType,
       'source': instance.source,
       'bib': instance.bib,

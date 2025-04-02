@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants/app_images.dart';
 import '../../constants/app_routes.dart';
-import '../../providers/features/publication_provider.dart';
+import '../../providers/features/pub_detail_provider.dart';
 import '../../theme/app_colors.dart';
 import 'dashboard_menu_tiles.dart';
 
@@ -26,7 +26,7 @@ class DashboardMenu extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final scholarly = context.read<ScholarDetailProvider>();
     final citation = context.read<CitationProvider>();
-    final publication = context.read<PublicationProvider>();
+    final publication = context.read<PubDetailProvider>();
     final auth = context.read<GoogleAuthProvider>();
     return Drawer(
       elevation: 0,

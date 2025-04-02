@@ -4,7 +4,7 @@ import 'package:profile_peneliti/constants/app_routes.dart';
 import 'package:profile_peneliti/models/scholar_detail/scholar_detail.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/dashboard_menu_provider.dart';
-import 'package:profile_peneliti/providers/features/publication_provider.dart';
+import 'package:profile_peneliti/providers/features/pub_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
 import 'package:profile_peneliti/providers/features/scholars_provider.dart';
 import 'package:profile_peneliti/utils/url_launch.dart';
@@ -23,8 +23,7 @@ class AppHeader extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     final scholar = Provider.of<ScholarDetailProvider>(context, listen: false);
     final citation = Provider.of<CitationProvider>(context, listen: false);
-    final publication =
-        Provider.of<PublicationProvider>(context, listen: false);
+    final publication = Provider.of<PubDetailProvider>(context, listen: false);
     return Card(
       shape: ContinuousRectangleBorder(),
       margin: EdgeInsets.zero,
@@ -68,7 +67,7 @@ class AppHeader extends StatelessWidget {
       BuildContext context,
       CitationProvider citation,
       ScholarDetailProvider scholar,
-      PublicationProvider publication) {
+      PubDetailProvider publication) {
     final style = Theme.of(context).textTheme;
 
     return FutureBuilder<int>(

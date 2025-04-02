@@ -1,12 +1,33 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:profile_peneliti/services/scholarly_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/pub_detail/pub_detail.dart';
 import '../../models/scholar_detail/scholar_detail.dart';
 import '../app_provider.dart';
 
-class PublicationProvider extends AppProvider {
+class PubDetailProvider extends AppProvider {
   ScholarDetail? _scholarDetail;
+  ScholarlyService service = ScholarlyService();
+
+  PubDetail? _publication;
+
+  PubDetail? get publication => _publication;
+
+  Future<void> fetchPubDetail(String name) async {
+    try {
+      setLoading();
+      notifyListeners();
+
+      _publication = await service.getPubDetail(name);
+      setSuccess();
+      notifyListeners();
+    } catch (e) {
+      setError(e.toString());
+      notifyListeners();
+    }
+  }
 
   void setScholarDetail(ScholarDetail? scholarDetail) {
     _scholarDetail = scholarDetail;
