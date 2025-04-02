@@ -45,17 +45,17 @@ class ScholarDetailProvider extends AppProvider {
   ///
   /// If [enable] is provided, sets the background update state accordingly.
   /// Otherwise, toggles the current state.
-  Future<void> toggleBackgroundUpdate(String authorName, {bool? enable}) async {
-    _backgroundUpdateEnabled = enable ?? !_backgroundUpdateEnabled;
+  // Future<void> toggleBackgroundUpdate(String authorName, {bool? enable}) async {
+  //   _backgroundUpdateEnabled = enable ?? !_backgroundUpdateEnabled;
 
-    if (_backgroundUpdateEnabled) {
-      await WorkmanagerService.startPeriodicUpdate(authorName);
-    } else {
-      await WorkmanagerService.stopPeriodicUpdate();
-    }
+  //   if (_backgroundUpdateEnabled) {
+  //     await WorkmanagerService.startPeriodicUpdate(authorName);
+  //   } else {
+  //     await WorkmanagerService.stopPeriodicUpdate();
+  //   }
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   /// Fetches scholar details by [name] and updates the state.
   Future<void> fetchScholarByName(String name) async {

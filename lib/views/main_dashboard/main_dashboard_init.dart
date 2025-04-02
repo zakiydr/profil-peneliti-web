@@ -32,10 +32,10 @@ class _MainDashboardInitState extends State<MainDashboardInit> {
     super.initState();
     final scholarly = context.read<ScholarDetailProvider>();
     _askPermission();
-    if (!kIsWeb) {
-      WorkmanagerService.startPeriodicUpdate(
-          scholarly.scholarDetail?.name ?? '');
-    }
+    // if (!kIsWeb) {
+    //   WorkmanagerService.startPeriodicUpdate(
+    //       scholarly.scholarDetail?.name ?? '');
+    // }
     // final publication =
     //     Provider.of<PublicationProvider>(context, listen: false);
     // WidgetsBinding.instance.addPostFrameCallback((_) {
