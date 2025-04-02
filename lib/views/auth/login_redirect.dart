@@ -5,6 +5,7 @@ import 'package:profile_peneliti/extension/string_extension.dart';
 import 'package:profile_peneliti/providers/features/citation_provider.dart';
 import 'package:profile_peneliti/providers/features/google_auth_provider.dart';
 import 'package:profile_peneliti/providers/features/scholar_detail_provider.dart';
+import 'package:profile_peneliti/services/proxy_service.dart';
 import 'package:profile_peneliti/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -18,34 +19,68 @@ class LoginRedirect extends StatefulWidget {
 }
 
 class _LoginRedirectState extends State<LoginRedirect> {
+  bool _isLoading = true;
+  String _errorMessage = '';
+  final ProxyService _proxyService = ProxyService();
+  
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeData();
     });
-    super.initState();
   }
 
-  void _initializeData() async {
-    final scholarly = context.read<ScholarDetailProvider>();
-    final citation = context.read<CitationProvider>();
-    final auth = context.read<GoogleAuthProvider>();
-
-    final name = '${auth.user?.displayName} ${auth.user?.email.splitDomain()}';
-
-    auth.login();
+  Future<void> _initializeData() async {
     try {
-      await scholarly.fetchScholarByName(scholarly.dummyName);
-      scholarly.saveData();
-      scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());
-      citation.saveCitation(scholarly.scholarDetail!.citedby);
+      await _proxyService.setProxy();
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Failed to set proxy: ${e.toString()}';
+        });
+      }
+      return;
+    }
 
+    if (!mounted) return;
+    
+    final scholarly = Provider.of<ScholarDetailProvider>(context, listen: false);
+    final citation = Provider.of<CitationProvider>(context, listen: false);
+    final auth = Provider.of<GoogleAuthProvider>(context, listen: false);
+
+    try {
+      await auth.login();
+      
+      final name = scholarly.dummyName;
+      // final name = '${auth.user?.displayName} ${auth.user?.email.splitDomain()}';
+      
+      await scholarly.fetchScholarByName(name);
+      
       if (scholarly.scholarDetail != null) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.dashboard);
+        scholarly.saveData();
+        scholarly.saveId(scholarly.scholarDetail!.scholarId.toString());
+        citation.saveCitation(scholarly.scholarDetail!.citedby);
+        
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.dashboard);
+        }
+      } else {
+        throw Exception('Scholar details not found');
       }
     } catch (e) {
-      await auth.logout();
-      Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+      if (mounted) {
+        try {
+          await auth.logout();
+          Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+        } catch (logoutError) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'Error: ${e.toString()}';
+          });
+        }
+      }
     }
   }
 
@@ -60,8 +95,29 @@ class _LoginRedirectState extends State<LoginRedirect> {
               image: AssetImage(AppImages.appIcon),
               width: 100,
             ),
-            LoadingAnimationWidget.waveDots(color: AppColors.blue, size: 50),
-            const Text('Signing in...'),
+            const SizedBox(height: 20),
+            if (_isLoading) ...[
+              LoadingAnimationWidget.waveDots(color: AppColors.blue, size: 50),
+              const SizedBox(height: 16),
+              const Text('Signing in...'),
+            ] else ...[
+              Text(
+                _errorMessage,
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isLoading = true;
+                    _errorMessage = '';
+                  });
+                  _initializeData();
+                },
+                child: const Text('Retry'),
+              ),
+            ],
           ],
         ),
       ),
