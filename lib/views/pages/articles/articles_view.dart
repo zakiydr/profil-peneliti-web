@@ -49,7 +49,7 @@ class ArticlesView extends StatelessWidget {
                       padding: ResponsiveConfig.getPadding(context),
                       child: DataTable2(
                         headingRowColor: WidgetStatePropertyAll(AppColors.grey),
-                        dataRowHeight: 90,
+                        dataRowHeight: kMinInteractiveDimension * 3,
                         columnSpacing: 12,
                         horizontalMargin: 12,
                         minWidth: 600,
@@ -70,6 +70,7 @@ class ArticlesView extends StatelessWidget {
                               style: textTheme.titleSmall,
                             ),
                             size: ColumnSize.L,
+                            fixedWidth: MediaQuery.sizeOf(context).width * .6,
                           ),
                           DataColumn2(
                             label: Text(
@@ -110,8 +111,7 @@ class ArticlesView extends StatelessWidget {
                                               .bib
                                               ?.title ??
                                           '',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 3,
+                                      maxLines: 5,
                                       style: textTheme.titleSmall,
                                     ),
                                     // const SizedBox(height: 4),

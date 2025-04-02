@@ -22,6 +22,10 @@ class MainDashboardView extends StatelessWidget {
     final scholar = context.read<ScholarDetailProvider>();
     final auth = context.read<GoogleAuthProvider>();
     return Scaffold(
+      // appBar: AppBar(
+      //   leading: BackButton(),
+      //   title: Text("data"),
+      // ),
       drawer: const DashboardMenu(),
       floatingActionButton: _buildFloatingButton(context, scholar),
       body: Consumer<ScholarDetailProvider>(
